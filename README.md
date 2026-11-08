@@ -19,7 +19,7 @@ and the pipeline runs locally. Nothing is uploaded or stored.
 ## 1. Use the website
 
 ### Option A: hosted link
-Open the [hosted app](https://anikaag7.github.io/988-insights/988-insights/web/). Nothing to install.
+Open the [hosted app](https://anikaag7.github.io/988-insights/988-insights/988-insights/web/). Nothing to install.
 
 ### Option B: open the file directly
 1. Download this repository (green **Code** button → **Download ZIP**, then unzip), or
