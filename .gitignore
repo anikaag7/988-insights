@@ -1,0 +1,11 @@
+# Keep survey data out of the public repo
+data/
+sample_data/
+*.xlsx
+*.xls
+*.csv
+!docs/sessions_reference.csv
+outputs/
+__pycache__/
+.venv/
+.DS_Store

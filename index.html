@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Privacy guarantee: connect-src 'none' means this page cannot send data anywhere. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>988 Training Insights</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        integrity="sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+        integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD"
+        crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg: #f6f6f3; --surface: #ffffff; --surface2: #f0f0ec; --ink: #1c1c1f; --ink2: #5a5a62;
+  --line: #e2e2dd; --accent: #33459a; --accent-ink: #ffffff; --focus: #33459a;
+  --warn: #8a5300; --warn-bg: #fff4dc; --ok: #1d6b3a; --ok-bg: #e5f4ea; --err: #a3271b; --err-bg: #fdecea;
+  --student: #eb6834; --adult: #2a78d6; --before: #8e8e96; --after: #138073; --grid: #ececea;
+  --radius: 12px; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131416; --surface: #1c1d20; --surface2: #25262a; --ink: #ececef; --ink2: #a6a6ae;
+    --line: #34353b; --accent: #8fa2f0; --accent-ink: #10121a; --focus: #8fa2f0;
+    --warn: #f2b955; --warn-bg: #2d2413; --ok: #7fd49d; --ok-bg: #15281c; --err: #ff8f84; --err-bg: #2e1715;
+    --student: #e66430; --adult: #2a78d6; --before: #77787f; --after: #3fb3a2; --grid: #2a2b30;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131416; --surface: #1c1d20; --surface2: #25262a; --ink: #ececef; --ink2: #a6a6ae;
+  --line: #34353b; --accent: #8fa2f0; --accent-ink: #10121a; --focus: #8fa2f0;
+  --warn: #f2b955; --warn-bg: #2d2413; --ok: #7fd49d; --ok-bg: #15281c; --err: #ff8f84; --err-bg: #2e1715;
+  --student: #e66430; --adult: #2a78d6; --before: #77787f; --after: #3fb3a2; --grid: #2a2b30;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow-wrap: anywhere;
+}
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+header.top { border-bottom: 1px solid var(--line); background: var(--surface); }
+header.top .wrap { display: flex; align-items: center; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+header.top h1 { font-size: 1.15rem; margin: 0; flex: 1; }
+.privacy { font-size: .85rem; color: var(--ok); background: var(--ok-bg); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+button, select { font: inherit; color: inherit; }
+button:focus-visible, select:focus-visible, .drop:focus-within, [role="tab"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.icon { padding: 6px 10px; }
+nav.tabs { display: flex; gap: 4px; margin: 20px 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav.tabs button { border: 0; background: none; padding: 10px 14px; border-bottom: 3px solid transparent; cursor: pointer; color: var(--ink2); white-space: nowrap; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+nav.tabs button:disabled { opacity: .45; cursor: not-allowed; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+.card h2 { font-size: 1.1rem; margin: 0 0 8px; }
+.card h3 { font-size: 1rem; margin: 0 0 6px; }
+.muted { color: var(--ink2); }
+.small { font-size: .875rem; }
+.drop {
+  display: block; border: 2px dashed var(--line); border-radius: var(--radius); padding: 36px 16px;
+  text-align: center; cursor: pointer; background: var(--surface2);
+}
+.drop.over { border-color: var(--accent); background: var(--surface); }
+.drop strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
+.drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 14px; }
+.demo-banner { margin: 16px 0 0; padding: 10px 14px; border-radius: 8px; border: 2px dashed var(--warn); background: var(--warn-bg); color: var(--ink); }
+.demo-banner strong { color: var(--warn); }
+.msg { padding: 12px 14px; border-radius: 8px; margin: 12px 0 0; }
+.msg.err { background: var(--err-bg); color: var(--err); }
+.msg.ok { background: var(--ok-bg); color: var(--ok); }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 4px 0 0; }
+.stats div { min-width: 0; }
+.stats b { font-size: 1.5rem; display: block; line-height: 1.2; }
+ul.fixes { margin: 6px 0 0; padding-left: 20px; }
+ul.fixes li { margin: 2px 0; }
+.banner { background: var(--warn-bg); color: var(--warn); padding: 10px 14px; border-radius: 8px; font-weight: 600; margin-bottom: 12px; }
+ul.warns { list-style: none; margin: 0; padding: 0; }
+ul.warns li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+ul.warns li:first-child { border-top: 0; }
+.wcount { font-size: 1.35rem; font-weight: 700; color: var(--warn); text-align: right; font-variant-numeric: tabular-nums; }
+.wbody strong { display: block; }
+.wbody p { margin: 2px 0 0; color: var(--ink2); font-size: .925rem; }
+.labelrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.labelrow:first-of-type { border-top: 0; }
+.labelrow .lbl { flex: 1 1 220px; min-width: 0; }
+.labelrow select { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); max-width: 100%; }
+.tbl-scroll { overflow-x: auto; }
+table.cols { border-collapse: collapse; width: 100%; font-size: .875rem; }
+table.cols th, table.cols td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+table.cols td.miss { color: var(--err); font-weight: 600; }
+details summary { cursor: pointer; font-weight: 600; }
+[hidden] { display: none !important; }
+/* Dashboard */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: flex-end; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px; }
+.filters label { display: flex; flex-direction: column; gap: 2px; font-size: .8rem; color: var(--ink2); flex: 1 1 130px; min-width: 0; }
+.filters select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); width: 100%; }
+.filters .btn { flex: 0 0 auto; }
+.filter-note { font-size: .85rem; color: var(--ink2); margin: -8px 0 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; min-width: 0; }
+.tile .l { font-size: .875rem; color: var(--ink2); }
+.tile .v { font-size: 1.9rem; font-weight: 700; line-height: 1.15; margin: 2px 0; }
+.tile .s { font-size: .8rem; color: var(--ink2); }
+.card .sub { color: var(--ink2); font-size: .9rem; margin: -4px 0 10px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .85rem; color: var(--ink2); margin: 0 0 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.chart-box { position: relative; width: 100%; }
+.means { margin: 12px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--surface2); border-radius: 0 8px 8px 0; font-size: .95rem; }
+.means b { display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink2); }
+.caveats { margin: 0; padding-left: 20px; }
+.caveats li { margin: 4px 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid2 > div { min-width: 0; }
+.story-h { font-size: 1.2rem; margin: 0 0 4px; }
+table.data { border-collapse: collapse; width: 100%; font-size: .85rem; margin-top: 8px; }
+table.data th, table.data td { padding: 5px 8px; border-top: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+table.data th:first-child, table.data td:first-child { text-align: left; }
+table.data td.few { color: var(--ink2); font-style: italic; }
+table.heat td.cell { color: var(--ink); }
+table.heat { min-width: 540px; }
+table.heat th { white-space: nowrap; }
+.tbl-scroll { -webkit-overflow-scrolling: touch; }
+details.tv { margin-top: 10px; font-size: .9rem; }
+details.tv summary { font-weight: 500; color: var(--ink2); }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+/* Print: one-page summary only */
+#printArea { display: none; }
+@media print {
+  @page { size: letter; margin: 0.45in; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body { font-size: 8.5pt; line-height: 1.28; }
+  #printArea td:not(:first-child), #printArea th:not(:first-child) { white-space: nowrap; }
+  #printArea td span { color: #555; font-size: 7.5pt; }
+  #printArea .blk.split { break-inside: auto; }
+  body > header, body > main, body > footer { display: none !important; }
+  #printArea { display: block; color: #000; }
+  #printArea h1 { font-size: 15pt; margin: 0 0 2pt; }
+  #printArea h2 { font-size: 10.5pt; margin: 0 0 3pt; }
+  #printArea .meta { color: #444; margin: 0 0 6pt; font-size: 8.5pt; }
+  #printArea .keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6pt; margin-bottom: 8pt; }
+  #printArea .keys div { border: 0.75pt solid #bbb; border-radius: 4pt; padding: 4pt 6pt; }
+  #printArea .keys b { display: block; font-size: 13pt; }
+  #printArea .keys span { color: #444; font-size: 7.5pt; display: block; }
+  #printArea .cols { column-count: 2; column-gap: 0.28in; }
+  #printArea .blk { break-inside: avoid; margin: 0 0 6pt; }
+  #printArea table { border-collapse: collapse; width: 100%; font-size: 8.5pt; }
+  #printArea th, #printArea td { border-bottom: 0.5pt solid #ccc; padding: 1.5pt 3pt; text-align: right; }
+  #printArea th:first-child, #printArea td:first-child { text-align: left; }
+  #printArea p { margin: 3pt 0 0; }
+  #printArea ul { margin: 2pt 0 0; padding-left: 12pt; }
+  #printArea li { margin: 1pt 0; }
+  #printArea .banner-p { font-weight: 600; font-size: 8pt; }
+  #printArea .foot { color: #555; font-size: 7.5pt; margin-top: 4pt; border-top: 0.5pt solid #ccc; padding-top: 3pt; }
+}
+footer { color: var(--ink2); font-size: .8rem; padding: 24px 0 40px; }
+@media (max-width: 560px) {
+  header.top .wrap { flex-wrap: wrap; }
+  header.top h1 { flex-basis: 100%; }
+  header.top .privacy { flex: 1; text-align: center; }
+  .hide-narrow { display: none; }
+  nav.tabs { gap: 0; }
+  nav.tabs button { padding: 10px 7px; font-size: .9rem; }
+  ul.warns li { grid-template-columns: 1fr; gap: 2px; }
+  .wcount { text-align: left; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>988 Training Insights</h1>
+    <span class="privacy">🔒 Your file never leaves your browser</span>
+    <button class="btn icon" id="themeBtn" type="button" aria-label="Switch light or dark theme">◐<span class="hide-narrow"> Theme</span></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="demo-banner" id="demoBanner" role="note" hidden><strong>Synthetic demo data.</strong> These responses were made up by this page to show how it works. They are not real survey results. Upload a survey file to see real results.</div>
+  <nav class="tabs" role="tablist" aria-label="Steps">
+    <button role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="true">1. Upload</button>
+    <button role="tab" id="tab-check" aria-controls="panel-check" aria-selected="false" disabled>2. <span class="hide-narrow">Data </span>check</button>
+    <button role="tab" id="tab-dash" aria-controls="panel-dash" aria-selected="false" disabled>3. Data visualizations</button>
+    <button role="tab" id="tab-export" aria-controls="panel-export" aria-selected="false" disabled>4. Export</button>
+  </nav>
+
+  <!-- 1. UPLOAD -->
+  <section id="panel-upload" role="tabpanel" aria-labelledby="tab-upload">
+    <div class="card">
+      <h2>Upload the survey export</h2>
+      <p class="muted">Use the Excel (.xlsx) or .csv file exported from the training survey. Columns are found by their wording, so renamed or reordered columns still work.</p>
+      <label class="drop" id="drop">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+        <strong>Drop the file here</strong>
+        <span class="muted">or click to choose a file</span>
+      </label>
+      <div id="uploadMsg" role="status" aria-live="polite"></div>
+      <div class="demo-row">
+        <button class="btn" type="button" id="demoBtn">Try synthetic demo data</button>
+        <span class="small muted">61 made-up responses created by this page to show how it works. Not real survey data.</span>
+      </div>
+      <p class="small muted" style="margin-bottom:0">The file is read on this computer only. Nothing is uploaded, stored, or sent anywhere, and closing this tab clears it.</p>
+    </div>
+  </section>
+
+  <!-- 2. DATA CHECK -->
+  <section id="panel-check" role="tabpanel" aria-labelledby="tab-check" hidden>
+    <div class="card" id="summaryCard"></div>
+    <div class="card" id="labelsCard" hidden></div>
+    <div class="card" id="warnCard"></div>
+    <div class="card" id="fixCard"></div>
+    <p><button class="btn primary" type="button" id="toDash">See data visualizations →</button></p>
+  </section>
+
+  <!-- 3. DASHBOARD -->
+  <section id="panel-dash" role="tabpanel" aria-labelledby="tab-dash" hidden>
+    <div class="filters" role="group" aria-label="Filters">
+      <label>From <select id="fFrom"></select></label>
+      <label>To <select id="fTo"></select></label>
+      <label>County <select id="fCounty"></select></label>
+      <label>Group <select id="fGroup">
+        <option value="Everyone">Everyone (all respondents)</option>
+        <option value="Students">Students only</option>
+        <option value="Adults">Adults only</option>
+        <option value="Compare">Compare students and adults</option>
+      </select></label>
+      <button class="btn" type="button" id="fReset">Reset</button>
+    </div>
+    <p class="filter-note" id="filterNote" aria-live="polite"></p>
+
+    <div class="tiles" id="tiles"></div>
+
+    <div class="card">
+      <h2>Knowledge before and after the training</h2>
+      <p class="sub" id="knowSub"></p>
+      <div class="legend"><span><i style="background:var(--before)"></i>Before (remembered)</span><span><i style="background:var(--after)"></i>After the training</span></div>
+      <div class="chart-box"><canvas id="cKnow" role="img" aria-label="Percent who agree, before and after, for three knowledge questions"></canvas></div>
+      <div class="means" id="knowMeans"></div>
+      <details class="tv"><summary>Show as table</summary><div class="tbl-scroll" id="knowTable"></div></details>
+    </div>
+
+    <div class="card">
+      <h2 class="story-h" id="svaTitle">Learning and training ratings</h2>
+      <p class="sub" id="svaSub"></p>
+      <div class="legend" id="svaLegend"></div>
+      <div class="grid2">
+        <div><h3>Same learning</h3><p class="small muted" style="margin:0 0 4px">% who agree, after the training</p>
+          <div class="chart-box"><canvas id="cSame" role="img" aria-label="Percent agree after training, students vs adults"></canvas></div></div>
+        <div><h3>Different feelings</h3><p class="small muted" style="margin:0 0 4px">% who agree, or % giving 9–10 out of 10</p>
+          <div class="chart-box"><canvas id="cFeel" role="img" aria-label="Presenter ratings and likelihood to recommend or call, students vs adults"></canvas></div></div>
+      </div>
+      <div class="means" id="svaMeans"></div>
+      <details class="tv"><summary>Show as table</summary><div class="tbl-scroll" id="svaTable"></div></details>
+    </div>
+
+    <div class="card">
+      <h2>What people suggest to improve the training</h2>
+      <p class="sub" id="improveSub">Approximate theme mentions in written responses to the improvement question. Comments are never displayed.</p>
+      <div class="legend" id="improveLegend"></div>
+      <div class="chart-box"><canvas id="cImprove" role="img" aria-label="Number of approximate mentions by theme in written suggestions for improving the training, by demographic group"></canvas></div>
+      <div class="means" id="improveMeans" aria-live="polite"></div>
+      <details class="tv"><summary>Show as table</summary><div class="tbl-scroll" id="improveTable"></div></details>
+    </div>
+
+    <div class="card">
+      <h2>The intent gap: knowing when vs. being likely to call</h2>
+      <p class="sub">Of people who agree they "know when to use 988", the % who rated how likely they are to call 988 at 6 or below (out of 10).</p>
+      <div class="chart-box"><canvas id="cGap" role="img" aria-label="Intent gap by group"></canvas></div>
+      <div class="means" id="gapMeans"></div>
+      <details class="tv"><summary>Show as table</summary><div class="tbl-scroll" id="gapTable"></div></details>
+    </div>
+
+    <div class="card">
+      <h2 id="countyTitle">Would recommend by county</h2>
+      <p class="sub" id="countySub"></p>
+      <div class="chart-box"><canvas id="cCounty" role="img" aria-label="Students who would recommend, by county"></canvas></div>
+      <div class="means" id="countyMeans"></div>
+      <details class="tv"><summary>Show as table</summary><div class="tbl-scroll" id="countyTable"></div></details>
+    </div>
+
+    <div class="card">
+      <h2>Survey coverage by month</h2>
+      <p class="sub" id="covSub"></p>
+      <div class="legend" id="covLegend"></div>
+      <div class="chart-box" style="height:220px"><canvas id="cCov" role="img" aria-label="Responses per month by group"></canvas></div>
+      <h3 style="margin-top:16px">Which questions were on the form</h3>
+      <p class="small muted" style="margin:0">% of that month's responses that answered each question. A blank-looking column usually means the question wasn't on that version of the form.</p>
+      <div class="tbl-scroll" id="covTable"></div>
+      <div class="means" id="covMeans"></div>
+    </div>
+
+    <div class="card">
+      <h2>Read these results with care</h2>
+      <ul class="caveats" id="caveats"></ul>
+    </div>
+  </section>
+
+  <!-- 4. EXPORT -->
+  <section id="panel-export" role="tabpanel" aria-labelledby="tab-export" hidden>
+    <div class="card">
+      <h2>Cleaned data</h2>
+      <p class="muted" id="exCleanInfo"></p>
+      <button class="btn primary" type="button" id="dlClean">Download cleaned data (.csv)</button>
+    </div>
+    <div class="card">
+      <h2>Possible issues list</h2>
+      <p class="muted" id="exWarnInfo"></p>
+      <button class="btn primary" type="button" id="dlWarn">Download possible issues (.csv)</button>
+    </div>
+    <div class="card">
+      <h2>One-page summary</h2>
+      <p class="muted" id="exPrintInfo"></p>
+      <button class="btn primary" type="button" id="printBtn">Print or save as PDF</button>
+    </div>
+    <p class="small muted">Files are created on this computer. Nothing is uploaded. Text answers that start with =, +, - or @ get a leading apostrophe in the CSV files so spreadsheet programs don't treat them as formulas.</p>
+  </section>
+</main>
+
+<footer class="wrap">988 Training Insights · open-source survey analysis tool · all processing happens in your browser.</footer>
+
+<!-- Filled in just before printing (see buildPrint). Only this is visible on paper. -->
+<section id="printArea"></section>
+
+<!-- ============================================================
+     CORE: reading, cleaning, checks. No page/DOM code in here, so the
+     same code can be tested outside the browser against the Python pipeline.
+     Mirrors pipeline/clean.py and pipeline/checks.py.
+     ============================================================ -->
+<script id="core">
+(function (g) {
+  'use strict';
+
+  // Each field is found by keywords in the column header (same as FIELDS in clean.py).
+  // A column matches when ALL keywords in one of its lists appear (case-insensitive).
+  const FIELDS = {
+    id: [['id']],
+    start: [['start time']],
+    end: [['completion time']],
+    language: [['language']],
+    role: [['are you a']],
+    train_date: [['date', 'training']],
+    county: [['county']],
+    post_identify: [['can identify']],
+    post_describe: [['can describe']],
+    post_when: [['know when']],
+    pre_identify: [['think back', 'identify'], ['could identify']],
+    pre_describe: [['think back', 'describe'], ['could describe']],
+    pre_when: [['think back', 'knew when'], ['knew when']],
+    q_engaged: [['engaged']],
+    q_knew: [['knew the subject'], ['subject matter']],
+    q_organized: [['organized']],
+    recommend: [['recommend']],
+    call988: [['likely', 'call 988']],
+    valuable: [['most valuable']],
+    improve: [['improve']],
+  };
+
+  // Plain-language names used on the page.
+  const FIELD_LABELS = {
+    id: 'Response ID', start: 'Survey start time', end: 'Survey finish time', language: 'Language',
+    role: 'Role ("Are you a…")', train_date: 'Training date', county: 'County',
+    post_identify: 'After: I can identify mental health crises',
+    post_describe: 'After: I can describe 988',
+    post_when: 'After: I know when to use 988',
+    pre_identify: 'Before: I could identify mental health crises',
+    pre_describe: 'Before: I could describe 988',
+    pre_when: 'Before: I knew when to use 988',
+    q_engaged: 'Presenter engaged participants', q_knew: 'Presenter knew the subject',
+    q_organized: 'Training was well organized', recommend: 'Would recommend (0–10)',
+    call988: 'Likely to call 988 (0–10)', valuable: 'Comment: most valuable thing',
+    improve: 'Comment: how to improve',
+  };
+
+  const LIKERT = {
+    'strongly disagree': 1, 'disagree': 2,
+    'neither agree nor disagree': 3, 'neither agree or disagree': 3,
+    'agree': 4, 'strongly agree': 5,
+  };
+  const SCALE_NAMES = { 1: 'Strongly disagree', 2: 'Disagree', 3: 'Neither agree nor disagree', 4: 'Agree', 5: 'Strongly agree' };
+  const ITEMS = ['identify', 'describe', 'when'];
+  const QUALITY = ['q_engaged', 'q_knew', 'q_organized'];
+  const ROLES = [['student', 'student'], ['staff', 'school staff'], ['parent', 'caregiver'], ['other', 'other']];
+
+  const SERVICE_AREA = new Set(['Anne Arundel', "Prince George's", 'Montgomery', "Queen Anne's"]);
+  const FAST_SECONDS = 20, LATE_DAYS = 30, DUP_WINDOW_MIN = 10, MISSING_WARN_PCT = 20;
+  const DAY_MS = 86400000;
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const HIDDEN = /[‎‏ ]/g;
+
+  /** Remove invisible characters and extra spaces; keep missing values missing (null). */
+  function normText(v) {
+    if (v === null || v === undefined) return null;
+    if (typeof v === 'number' && Number.isNaN(v)) return null;
+    const s = String(v).replace(HIDDEN, ' ').replace(/\s+/g, ' ').trim();
+    return s === '' ? null : s;
+  }
+
+  /** Number or null (like pd.to_numeric(errors="coerce")). */
+  function toNum(v) {
+    if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+    const s = normText(v);
+    if (s === null) return null;
+    return /^[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/.test(s) ? Number(s) : null;
+  }
+
+  function utc(y, mo, d, h, mi, s) {
+    const t = Date.UTC(y, mo - 1, d, h || 0, mi || 0, s || 0);
+    const x = new Date(t);
+    // Reject impossible dates such as Feb 30.
+    if (x.getUTCFullYear() !== y || x.getUTCMonth() !== mo - 1 || x.getUTCDate() !== d) return null;
+    return t;
+  }
+
+  /** Date/time -> milliseconds, read as clock time with no time zone, or null. */
+  function parseDate(v) {
+    if (v === null || v === undefined) return null;
+    if (typeof v === 'number') {                       // Excel date number
+      if (!Number.isFinite(v)) return null;
+      return Math.round((v - 25569) * 86400) * 1000;
+    }
+    if (v instanceof Date) {
+      if (Number.isNaN(v.getTime())) return null;
+      return Date.UTC(v.getFullYear(), v.getMonth(), v.getDate(), v.getHours(), v.getMinutes(), v.getSeconds());
+    }
+    const s = normText(v);
+    if (s === null) return null;
+    let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?$/);
+    if (m) return utc(+m[1], +m[2], +m[3], +m[4] || 0, +m[5] || 0, +m[6] || 0);
+    m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})(?:,?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AaPp][Mm])?)?$/);
+    if (m) {
+      let y = +m[3]; if (y < 100) y += 2000;
+      let h = +m[4] || 0;
+      if (m[7]) { const pm = /p/i.test(m[7]); if (h === 12) h = 0; if (pm) h += 12; }
+      return utc(y, +m[1], +m[2], h, +m[5] || 0, +m[6] || 0);
+    }
+    return null;
+  }
+
+  const dayStart = (t) => Math.floor(t / DAY_MS) * DAY_MS;
+  const isoDate = (t) => new Date(t).toISOString().slice(0, 10);
+  const isoMonth = (t) => new Date(t).toISOString().slice(0, 7);
+  const monthName = (t) => { const d = new Date(t); return MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); };
+  const fmt = (n) => Number(n).toLocaleString('en-US');
+
+  /** Read the first sheet of an .xlsx/.csv file -> {headers, rows}. */
+  function readWorkbook(data, name) {
+    const X = g.XLSX;
+    if (!X) throw new Error('The spreadsheet reader did not load. Check your internet connection and reload the page.');
+    const isText = /\.(csv|txt)$/i.test(name || '');
+    let wb;
+    if (isText) {
+      // Decode as UTF-8 ourselves so accents and curly quotes survive; keep every value as text.
+      let text = new TextDecoder('utf-8').decode(data);
+      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+      wb = X.read(text, { type: 'string', raw: true });
+    } else {
+      wb = X.read(data, { type: 'array', cellDates: false });
+    }
+    const sheet = wb.SheetNames[0];
+    const aoa = X.utils.sheet_to_json(wb.Sheets[sheet], { header: 1, raw: true, defval: null, blankrows: false });
+    if (!aoa.length) throw new Error('This file looks empty.');
+    const headers = aoa[0].map((h) => (h === null || h === undefined ? '' : String(h)));
+    return { headers, rows: aoa.slice(1), sheet };
+  }
+
+  /** {found: {field: column index}, missing: [field]} — same order and rules as match_columns. */
+  function matchColumns(headers) {
+    const low = headers.map((h) => (normText(h) || '').toLowerCase());
+    const found = {}, used = new Set(), missing = [];
+    for (const [field, options] of Object.entries(FIELDS)) {
+      let hit = -1;
+      for (const keywords of options) {
+        for (let i = 0; i < low.length; i++) {
+          if (used.has(i)) continue;
+          if (field === 'id' && low[i] !== 'id') continue;
+          if (keywords.every((k) => low[i].includes(k))) { hit = i; break; }
+        }
+        if (hit >= 0) break;
+      }
+      if (hit >= 0) { found[field] = hit; used.add(hit); } else missing.push(field);
+    }
+    return { found, missing };
+  }
+
+  const mean = (arr) => { const v = arr.filter((x) => x !== null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+
+  /**
+   * Clean raw rows (mirror of load_and_clean). Nothing is dropped.
+   * overrides: {"Very agree": 4, ...} maps unrecognized labels to a score; missing/0 = exclude.
+   */
+  function cleanRows(raw, overrides) {
+    overrides = overrides || {};
+    const { found, missing } = matchColumns(raw.headers);
+    const foundHeaders = {};
+    for (const f in found) foundHeaders[f] = raw.headers[found[f]];
+    const fixes = { cellsTidied: 0, headersTidied: 0, neitherOr: 0, multiRole: 0, badDates: 0, countyRaw: new Set(), countyClean: new Set() };
+    for (const h of raw.headers) if (normText(h) !== null && normText(h) !== h) fixes.headersTidied++;
+
+    const perField = {};          // field -> {label: count}, for Python-identical ordering
+    const unknownRows = {};       // label -> [row numbers]
+    const unknownWhere = {};      // label -> Set(field)
+    const get = (r, f) => (f in found ? (r[found[f]] === undefined ? null : r[found[f]]) : null);
+    const txt = (v) => {
+      const s = normText(v);
+      if (s !== null && typeof v === 'string' && s !== v) fixes.cellsTidied++;
+      return s;
+    };
+
+    const rows = raw.rows.map((r, i) => {
+      const rowNum = i + 2;   // spreadsheet row number (row 1 = headers)
+      const code = (field) => {
+        const s = txt(get(r, field));
+        if (s === null) return [null, null];
+        const l = s.toLowerCase();
+        if (l === 'neither agree or disagree') fixes.neitherOr++;
+        let c = LIKERT[l];
+        if (c === undefined) {
+          (perField[field] = perField[field] || {})[s] = (perField[field][s] || 0) + 1;
+          (unknownRows[s] = unknownRows[s] || []).push(rowNum);
+          (unknownWhere[s] = unknownWhere[s] || new Set()).add(field);
+          const o = Number(overrides[s]);
+          c = o >= 1 && o <= 5 ? o : null;
+        }
+        return [c, s];
+      };
+
+      const o = { _row: rowNum };
+      o.id = get(r, 'id');
+      o.start = parseDate(get(r, 'start'));
+      o.end = parseDate(get(r, 'end'));
+      o.duration_s = o.start !== null && o.end !== null ? (o.end - o.start) / 1000 : null;
+      o.month = o.start !== null ? isoMonth(o.start) : null;
+      const lang = txt(get(r, 'language'));
+      o.language = lang && lang.toLowerCase().startsWith('esp') ? 'Spanish' : 'English';
+
+      const roles = (txt(get(r, 'role')) || '').toLowerCase();
+      const has = {};
+      let nRoles = 0;
+      for (const [key, label] of ROLES) { has[key] = roles.includes(label); o['role_' + key] = has[key]; if (has[key]) nRoles++; }
+      o.role = nRoles > 1 ? 'Multiple' : has.student ? 'Student' : has.staff ? 'School staff'
+        : has.parent ? 'Caregiver/parent' : has.other ? 'Other/community' : 'Missing';
+      if (nRoles > 1) fixes.multiRole++;
+      o.group = o.role === 'Student' ? 'Students' : 'Adults';
+
+      const td = get(r, 'train_date');
+      o.train_date = parseDate(td);
+      if (o.train_date === null && normText(td) !== null) fixes.badDates++;
+
+      const rawCounty = txt(get(r, 'county'));
+      o.county = rawCounty === null ? null : rawCounty.replace(/\s*county.*$/i, '').trim();
+      if (rawCounty !== null) { fixes.countyRaw.add(String(get(r, 'county'))); fixes.countyClean.add(o.county); }
+      o.session = (o.train_date !== null ? isoDate(o.train_date) : 'no date') + ' | ' + (o.county === null ? 'no county' : o.county);
+
+      for (const it of ITEMS) {
+        [o['post_' + it]] = code('post_' + it);
+        [o['pre_' + it]] = code('pre_' + it);
+        o['gain_' + it] = o['post_' + it] !== null && o['pre_' + it] !== null ? o['post_' + it] - o['pre_' + it] : null;
+      }
+      for (const q of QUALITY) [o[q], o[q + '_text']] = code(q);
+
+      o.post_mean = mean(ITEMS.map((it) => o['post_' + it]));
+      o.pre_mean = mean(ITEMS.map((it) => o['pre_' + it]));
+      o.gain_mean = o.post_mean !== null && o.pre_mean !== null ? o.post_mean - o.pre_mean : null;
+      o.recommend = toNum(get(r, 'recommend'));
+      o.call988 = toNum(get(r, 'call988'));
+      o.valuable = txt(get(r, 'valuable'));
+      o.improve = txt(get(r, 'improve'));
+      return o;
+    });
+
+    // Merge unrecognized labels in the same order as clean.py (field order, most common first).
+    const unknown = {};
+    const order = [];
+    for (const it of ITEMS) order.push('post_' + it, 'pre_' + it);
+    order.push(...QUALITY);
+    for (const f of order) {
+      const counts = perField[f];
+      if (!counts) continue;
+      for (const [label, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) unknown[label] = (unknown[label] || 0) + n;
+    }
+
+    const notes = {
+      rows: rows.length, columns: raw.headers.length, sheet: raw.sheet,
+      found, foundHeaders, missing_fields: missing,
+      unknown_labels: unknown, unknown_rows: unknownRows,
+      unknown_where: Object.fromEntries(Object.entries(unknownWhere).map(([k, s]) => [k, [...s]])),
+      overrides: { ...overrides },
+      fixes: { ...fixes, countyRaw: fixes.countyRaw.size, countyClean: fixes.countyClean.size },
+    };
+    return { rows, notes };
+  }
+
+  const pct1 = (n, total) => (total ? (n / total * 100).toFixed(1) + '%' : '0%');
+
+  /** Possible issues (mirror of run_checks). Returns [{key, title, count, why, rows}]. Nothing is removed. */
+  function runChecks(rows, notes) {
+    const total = rows.length;
+    const out = [];
+    const add = (key, title, rowsList, why, count) =>
+      out.push({ key, title, count: count === undefined ? rowsList.length : count, why, rows: rowsList });
+
+    // 1. Columns or answer labels the cleaner did not recognize
+    if (notes.missing_fields.length) {
+      add('missing_columns', 'Questions not found in this file', [],
+        'Not found: ' + notes.missing_fields.map((f) => FIELD_LABELS[f]).join(', ') + '. Results that need them are skipped.',
+        notes.missing_fields.length);
+    }
+    for (const [label, n] of Object.entries(notes.unknown_labels)) {
+      const o = Number(notes.overrides[label]);
+      const choice = o >= 1 && o <= 5
+        ? ` You chose to count these as "${SCALE_NAMES[o]}".`
+        : ' Ask EveryMind what this label meant on the form.';
+      add('unknown_label', `Unrecognized answer "${label}"`, notes.unknown_rows[label] || [],
+        (o >= 1 && o <= 5 ? 'Not on the agree/disagree scale.' : 'Not on the agree/disagree scale, so these answers are treated as missing.') + choice, n);
+    }
+
+    // 2. Questions that many responses skipped (often a sign of different survey versions)
+    for (const [col, name] of [['call988', 'Likely to call 988'], ['recommend', 'Would recommend'], ['q_engaged', 'Presenter engaged participants']]) {
+      const blankRows = rows.filter((r) => r[col] === null).map((r) => r._row);
+      if (total && blankRows.length / total * 100 >= MISSING_WARN_PCT) {
+        add('blank_' + col, `"${name}" is blank for many responses`, blankRows,
+          `${pct1(blankRows.length, total)} blank. It may not have been on every version of the form, so results for this question may not represent everyone.`);
+      }
+    }
+
+    // 3. Low confidence after training but a 9-10 recommendation
+    const lowHigh = rows.filter((r) => r.post_mean !== null && r.post_mean <= 2 && r.recommend !== null && r.recommend >= 9);
+    if (lowHigh.length) add('low_high', 'Low confidence after training but would strongly recommend', lowHigh.map((r) => r._row),
+      'Could be real low confidence, or the person may have misread the scale. Kept in results.');
+
+    // 4. Very fast completions
+    const fast = rows.filter((r) => r.duration_s !== null && r.duration_s < FAST_SECONDS);
+    if (fast.length) add('fast', `Completed in under ${FAST_SECONDS} seconds`, fast.map((r) => r._row),
+      'Possibly rushed. If surveys were typed in from paper, this reflects typing speed instead.');
+
+    // 5. Possible duplicate submissions
+    const keyCols = ['session', 'role', ...ITEMS.map((i) => 'post_' + i), ...ITEMS.map((i) => 'pre_' + i),
+      ...QUALITY.map((q) => q + '_text'), 'recommend', 'call988', 'valuable', 'improve'];
+    const groups = new Map();
+    for (const r of rows) {
+      const k = JSON.stringify(keyCols.map((c) => r[c]));
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(r);
+    }
+    const dupRows = [];
+    for (const grp of groups.values()) {
+      if (grp.length < 2) continue;
+      const sorted = [...grp].sort((a, b) => (a.start === null) - (b.start === null) || (a.start - b.start));
+      const hasComment = grp.some((r) => r.valuable !== null || r.improve !== null);
+      const first = sorted[0].start, last = sorted[sorted.length - 1].start;
+      const gapMin = first !== null && last !== null ? (last - first) / 60000 : NaN;
+      if (hasComment || gapMin < DUP_WINDOW_MIN) dupRows.push(...sorted.slice(1).map((r) => r._row));
+    }
+    if (dupRows.length) add('duplicates', 'Possible duplicate submissions', dupRows,
+      "Identical answers in the same session, minutes apart or with identical comments. The survey is anonymous, so these can't be confirmed. Kept in results.");
+
+    // 6. Date problems
+    const noDate = [], before = [], late = [];
+    for (const r of rows) {
+      if (r.train_date === null) { noDate.push(r._row); continue; }
+      if (r.start === null) continue;
+      const days = Math.floor((dayStart(r.start) - r.train_date) / DAY_MS);
+      if (days < 0) before.push(r._row);
+      else if (days > LATE_DAYS) late.push(r._row);
+    }
+    if (noDate.length + before.length + late.length) {
+      add('dates', 'Training date looks wrong or is missing', [...noDate, ...before, ...late],
+        `${noDate.length} missing, ${before.length} surveyed before the training date, ${late.length} surveyed more than ${LATE_DAYS} days after.`);
+      const w = out[out.length - 1];
+      w.parts = { missing: noDate, before, late };
+    }
+
+    // 7. Counties outside the service area
+    const outside = rows.filter((r) => r.county !== null && !SERVICE_AREA.has(r.county));
+    if (outside.length) {
+      const counts = {};
+      for (const r of outside) counts[r.county] = (counts[r.county] || 0) + 1;
+      const txtCounts = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([c, n]) => `${c || '(blank)'} ${n}`).join(', ');
+      add('outside', 'County outside the service area', outside.map((r) => r._row),
+        `${txtCounts}. Could be typos, out-of-area attendees, or test entries.`);
+    }
+    return out;
+  }
+
+  /** Headline facts for the data-check summary. */
+  function summarize(rows) {
+    const starts = rows.map((r) => r.start).filter((t) => t !== null);
+    const min = starts.length ? Math.min(...starts) : null, max = starts.length ? Math.max(...starts) : null;
+    return {
+      responses: rows.length,
+      sessions: new Set(rows.map((r) => r.session)).size,
+      students: rows.filter((r) => r.group === 'Students').length,
+      adults: rows.filter((r) => r.group === 'Adults').length,
+      first: min, last: max,
+      range: min === null ? 'no survey dates found' : (monthName(min) === monthName(max) ? monthName(min) : monthName(min) + ' – ' + monthName(max)),
+    };
+  }
+
+  // ---------- Metrics (shared definitions from CLAUDE.md) ----------
+  const nonNull = (rows, k) => rows.map((r) => r[k]).filter((x) => x !== null);
+
+  /** % agree (4 or 5) among people who answered this question. */
+  function pctAgree(rows, k) {
+    const v = nonNull(rows, k);
+    const agree = v.filter((x) => x >= 4).length;
+    return { pct: v.length ? agree / v.length * 100 : null, k: agree, n: v.length };
+  }
+
+  /** 0–10 scale summary: mean, % 9–10 (promoters), % 0–6 (detractors), NPS. */
+  function scaleStats(rows, k) {
+    const v = nonNull(rows, k);
+    const n = v.length;
+    const top = v.filter((x) => x >= 9).length, low = v.filter((x) => x <= 6).length;
+    return {
+      n, top, low, mean: n ? v.reduce((a, b) => a + b, 0) / n : null,
+      pctTop: n ? top / n * 100 : null, pctLow: n ? low / n * 100 : null,
+      nps: n ? (top - low) / n * 100 : null,
+    };
+  }
+
+  /** Of people who agree they know when to use 988 AND answered call988: % rating call at 6 or below. */
+  function intentGap(rows) {
+    const base = rows.filter((r) => r.call988 !== null && r.post_when !== null && r.post_when >= 4);
+    const k = base.filter((r) => r.call988 <= 6).length;
+    return { pct: base.length ? k / base.length * 100 : null, k, n: base.length };
+  }
+
+  const TOO_FEW = 10;
+  const COVERAGE_FIELDS = ['post_when', 'pre_when', 'q_engaged', 'recommend', 'call988', 'improve'];
+
+  function groupMetrics(rows) {
+    const out = { n: rows.length, know: {}, quality: {} };
+    for (const it of ITEMS) out.know[it] = { pre: pctAgree(rows, 'pre_' + it), post: pctAgree(rows, 'post_' + it) };
+    const g = nonNull(rows, 'gain_mean');
+    out.gain = { mean: g.length ? g.reduce((a, b) => a + b, 0) / g.length : null, n: g.length };
+    for (const q of QUALITY) out.quality[q] = pctAgree(rows, q);
+    out.recommend = scaleStats(rows, 'recommend');
+    out.call988 = scaleStats(rows, 'call988');
+    out.intentGap = intentGap(rows);
+    return out;
+  }
+
+  /** Every number the dashboard shows comes from here. */
+  function computeMetrics(rows) {
+    const students = rows.filter((r) => r.group === 'Students');
+    const adults = rows.filter((r) => r.group === 'Adults');
+
+    const byCounty = new Map();
+    for (const r of students) {
+      const c = r.county === null ? 'No county given' : (r.county || '(blank)');
+      if (!byCounty.has(c)) byCounty.set(c, []);
+      byCounty.get(c).push(r);
+    }
+    const studentCounties = [...byCounty.entries()]
+      .map(([county, rs]) => ({ county, n: rs.length, tooFew: rs.length < TOO_FEW, recommend: scaleStats(rs, 'recommend') }))
+      .sort((a, b) => b.n - a.n || a.county.localeCompare(b.county));
+
+    const byMonth = new Map();
+    for (const r of rows) {
+      const m = r.month || 'No date';
+      if (!byMonth.has(m)) byMonth.set(m, []);
+      byMonth.get(m).push(r);
+    }
+    const coverage = [...byMonth.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([month, rs]) => ({
+      month, n: rs.length,
+      students: rs.filter((r) => r.group === 'Students').length,
+      answered: Object.fromEntries(COVERAGE_FIELDS.map((f) => [f, rs.filter((r) => r[f] !== null).length])),
+    }));
+
+    // Caveat facts: how separate students and adults were, and how long after training surveys came in.
+    const adultSessions = new Set(adults.map((r) => r.session));
+    const studentsNoAdults = students.filter((r) => !adultSessions.has(r.session)).length;
+    const median = (v) => { if (!v.length) return null; const s = [...v].sort((a, b) => a - b); const h = s.length >> 1; return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2; };
+    const delays = (rs) => rs.filter((r) => r.start !== null && r.train_date !== null)
+      .map((r) => Math.floor((dayStart(r.start) - r.train_date) / DAY_MS)).filter((d) => d >= 0);
+    const caveats = {
+      studentsNoAdults, students: students.length,
+      delayStudents: median(delays(students)), delayAdults: median(delays(adults)),
+      callAsked: rows.filter((r) => r.call988 !== null).length,
+    };
+
+    return {
+      summary: summarize(rows),
+      all: groupMetrics(rows), students: groupMetrics(students), adults: groupMetrics(adults),
+      studentCounties, coverage, caveats,
+    };
+  }
+
+  // ---------- Parity self-test: the "Parity targets" table in CLAUDE.md ----------
+  const PARITY = [
+    ['Responses', (m) => m.summary.responses, 1299, 0],
+    ['Students', (m) => m.summary.students, 1076, 0],
+    ['Adults', (m) => m.summary.adults, 223, 0],
+    ['Sessions', (m) => m.summary.sessions, 55, 0],
+    ['% agree before: identify', (m) => m.all.know.identify.pre.pct, 72.2, 1],
+    ['% agree after: identify', (m) => m.all.know.identify.post.pct, 89.9, 1],
+    ['% agree before: describe 988', (m) => m.all.know.describe.pre.pct, 46.5, 1],
+    ['% agree after: describe 988', (m) => m.all.know.describe.post.pct, 90.5, 1],
+    ['% agree before: know when', (m) => m.all.know.when.pre.pct, 55.7, 1],
+    ['% agree after: know when', (m) => m.all.know.when.post.pct, 92.3, 1],
+    ['NPS overall', (m) => m.all.recommend.nps, 12.0, 1],
+    ['NPS overall n', (m) => m.all.recommend.n, 1266, 0],
+    ['Students NPS', (m) => m.students.recommend.nps, -2.2, 1],
+    ['Students mean recommend', (m) => m.students.recommend.mean, 7.21, 2],
+    ['Students % 9–10', (m) => m.students.recommend.pctTop, 32.3, 1],
+    ['Adults NPS', (m) => m.adults.recommend.nps, 79.9, 1],
+    ['Adults mean recommend', (m) => m.adults.recommend.mean, 9.39, 2],
+    ['Adults % 9–10', (m) => m.adults.recommend.pctTop, 82.2, 1],
+    ['Students % agree after: identify', (m) => m.students.know.identify.post.pct, 89.6, 1],
+    ['Students % agree after: describe', (m) => m.students.know.describe.post.pct, 90.3, 1],
+    ['Students % agree after: when', (m) => m.students.know.when.post.pct, 92.2, 1],
+    ['Adults % agree after: identify', (m) => m.adults.know.identify.post.pct, 91.5, 1],
+    ['Adults % agree after: describe', (m) => m.adults.know.describe.post.pct, 91.0, 1],
+    ['Adults % agree after: when', (m) => m.adults.know.when.post.pct, 92.8, 1],
+    ['Students presenter engaged', (m) => m.students.quality.q_engaged.pct, 86.3, 1],
+    ['Students presenter knew', (m) => m.students.quality.q_knew.pct, 88.7, 1],
+    ['Students well organized', (m) => m.students.quality.q_organized.pct, 90.7, 1],
+    ['Adults presenter engaged', (m) => m.adults.quality.q_engaged.pct, 95.1, 1],
+    ['Adults presenter knew', (m) => m.adults.quality.q_knew.pct, 96.6, 1],
+    ['Adults well organized', (m) => m.adults.quality.q_organized.pct, 95.6, 1],
+    ['Students likely to call 988, mean', (m) => m.students.call988.mean, 7.37, 2],
+    ['Students likely to call 988, n', (m) => m.students.call988.n, 253, 0],
+    ['Adults likely to call 988, mean', (m) => m.adults.call988.mean, 9.50, 2],
+    ['Adults likely to call 988, n', (m) => m.adults.call988.n, 40, 0],
+    ['Students intent gap %', (m) => m.students.intentGap.pct, 29.0, 1],
+    ['Students intent gap n', (m) => m.students.intentGap.n, 231, 0],
+    ['Adults intent gap %', (m) => m.adults.intentGap.pct, 2.6, 1],
+    ['Adults intent gap n', (m) => m.adults.intentGap.n, 39, 0],
+    ...[['Anne Arundel', 887], ["Prince George's", 180], ["Queen Anne's", 6], ['Montgomery', 3]].map(([c, v]) =>
+      [`Students in ${c}`, (m) => (m.studentCounties.find((x) => x.county === c) || {}).n, v, 0]),
+    ['Anne Arundel students mean recommend', (m) => m.studentCounties.find((x) => x.county === 'Anne Arundel').recommend.mean, 7.02, 2],
+    ['Anne Arundel students % 9–10', (m) => m.studentCounties.find((x) => x.county === 'Anne Arundel').recommend.pctTop, 28.5, 1],
+    ["Prince George's students mean recommend", (m) => m.studentCounties.find((x) => x.county === "Prince George's").recommend.mean, 8.25, 2],
+    ["Prince George's students % 9–10", (m) => m.studentCounties.find((x) => x.county === "Prince George's").recommend.pctTop, 52.7, 1],
+  ];
+
+  /** Is this the original survey file the parity table was computed on? */
+  function isReferenceFile(rows, notes) {
+    const labels = Object.keys(notes.unknown_labels).sort().join('|');
+    return rows.length === 1299 && !notes.missing_fields.length && labels === 'Satisfied|Very agree'
+      && !Object.keys(notes.overrides).length;
+  }
+
+  /** Compare each metric (rounded to the target's decimals) with its target. */
+  function selfTest(metrics) {
+    const results = PARITY.map(([name, getter, target, dp]) => {
+      let value;
+      try { value = getter(metrics); } catch (e) { value = undefined; }
+      const shown = typeof value === 'number' && Number.isFinite(value) ? Number(value.toFixed(dp)) : value;
+      return { check: name, target, got: shown, result: shown === target ? 'PASS' : 'FAIL' };
+    });
+    return { results, passed: results.filter((r) => r.result === 'PASS').length, total: results.length };
+  }
+
+  // ---------- Exports ----------
+  // Same columns and order as pipeline/clean.py's clean.csv, plus the row number and per-row flags.
+  const CLEAN_COLS = ['id', 'start', 'end', 'duration_s', 'language', 'role_student', 'role_staff', 'role_parent', 'role_other',
+    'role', 'group', 'train_date', 'county', 'session',
+    ...ITEMS.flatMap((i) => ['post_' + i, 'pre_' + i, 'gain_' + i]),
+    ...QUALITY.flatMap((q) => [q, q + '_text']),
+    'post_mean', 'pre_mean', 'gain_mean', 'recommend', 'call988', 'valuable', 'improve'];
+  const DATE_COLS = new Set(['start', 'end', 'train_date']);
+
+  const fmtDateTime = (t, dateOnly) => {
+    const iso = new Date(t).toISOString();
+    return dateOnly && iso.slice(11, 19) === '00:00:00' ? iso.slice(0, 10) : iso.slice(0, 10) + ' ' + iso.slice(11, 19);
+  };
+
+  /** One CSV cell. Text starting with = + - @ gets a leading ' so spreadsheet apps don't run it as a formula. */
+  function csvCell(v) {
+    if (v === null || v === undefined) return '';
+    let s = typeof v === 'boolean' ? (v ? 'True' : 'False') : String(v);
+    if (typeof v === 'string' && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  const csvLine = (cells) => cells.map(csvCell).join(',');
+  const BOM = '﻿';   // lets Excel read accents and curly quotes correctly
+
+  /** Short per-row flags (form-version "blank for many" warnings are about the form, not the row, so they're left out). */
+  function rowFlags(warnings) {
+    const flags = new Map();
+    const add = (row, text) => { if (!flags.has(row)) flags.set(row, []); flags.get(row).push(text); };
+    for (const w of warnings) {
+      if (w.key.startsWith('blank_') || w.key === 'missing_columns') continue;
+      if (w.key === 'dates' && w.parts) {
+        w.parts.missing.forEach((r) => add(r, 'Training date missing'));
+        w.parts.before.forEach((r) => add(r, 'Surveyed before training date'));
+        w.parts.late.forEach((r) => add(r, `Surveyed more than ${LATE_DAYS} days after training`));
+      } else for (const r of w.rows) add(r, w.title);
+    }
+    return flags;
+  }
+
+  function cleanedCSV(rows, warnings) {
+    const flags = rowFlags(warnings);
+    const lines = [csvLine(['row_in_file', ...CLEAN_COLS, 'possible_issues'])];
+    for (const r of rows) {
+      lines.push(csvLine([r._row, ...CLEAN_COLS.map((c) => (DATE_COLS.has(c) && r[c] !== null ? fmtDateTime(r[c], c === 'train_date') : r[c])),
+        (flags.get(r._row) || []).join('; ')]));
+    }
+    return BOM + lines.join('\r\n') + '\r\n';
+  }
+
+  /** One line per (warning, response). Warnings that aren't about specific rows get one line with no row. */
+  function warningsCSV(rows, warnings) {
+    const byRow = new Map(rows.map((r) => [r._row, r]));
+    const lines = [csvLine(['warning', 'total_for_this_warning', 'detail', 'row_in_file', 'response_id', 'session', 'group', 'explanation'])];
+    for (const w of warnings) {
+      const parts = w.key === 'dates' && w.parts
+        ? [['Training date missing', w.parts.missing], ['Surveyed before training date', w.parts.before], [`Surveyed more than ${LATE_DAYS} days after training`, w.parts.late]]
+        : [['', w.rows]];
+      if (!w.rows.length) { lines.push(csvLine([w.title, w.count, '', '', '', '', '', w.why])); continue; }
+      for (const [detail, list] of parts) {
+        for (const rn of list) {
+          const r = byRow.get(rn) || {};
+          lines.push(csvLine([w.title, w.count, detail, rn, r.id, r.session, r.group, w.why]));
+        }
+      }
+    }
+    return BOM + lines.join('\r\n') + '\r\n';
+  }
+
+  // ---------- Synthetic demo data ----------
+  // Made-up responses generated here, never copied from real data. Fixed seed = same demo every time.
+  // Includes a few planted quirks so the data check has something to show.
+  function makeSyntheticData(seed) {
+    let s = (seed || 988) >>> 0;
+    const rand = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const pick = (arr) => arr[Math.floor(rand() * arr.length)];
+    const int = (lo, hi) => lo + Math.floor(rand() * (hi - lo + 1));
+    const KNOW_L = ['Strongly disagree', 'Disagree', 'Neither agree nor disagree', 'Agree', 'Strongly agree'];
+    const QUAL_L = ['Strongly disagree', 'Disagree', 'Neither agree or disagree', 'Agree', 'Strongly agree '];
+    const lik = (labels, center) => labels[Math.max(0, Math.min(4, Math.round(center + (rand() - 0.5) * 2.4)))];
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = (t) => { const d = new Date(t); return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`; };
+    const headers = [
+      'Id', 'Start time', 'Completion time', 'Language', 'Are you a....?', 'Please enter the date of your training.',
+      'Which county is this training affiliated with? ',
+      'Please tell us how much you disagree or agree with the statements..I can identify mental health challenges and crises.',
+      'Please tell us how much you disagree or agree with the statements..I can describe 988 and how it works.',
+      'Please tell us how much you disagree or agree with the statements..I know when to use 988.',
+      'Now think back to before you took part in the Understanding 988 training.  .I could identify mental health challenges and crises.',
+      'Now think back to before you took part in the Understanding 988 training.  .I could describe 988 and how it works.',
+      'Now think back to before you took part in the Understanding 988 training.  .I knew when to use 988.',
+      'How much do you agree or disagree with the following aspects of the training?.The presenter(s) engaged the participants.',
+      'How much do you agree or disagree with the following aspects of the training?.The presenter(s) knew the subject matter well. ',
+      'How much do you agree or disagree with the following aspects of the training?.The training was well organized.',
+      'How likely are you to recommend the Understanding 988 training to a friend or colleague?',
+      'How likely are you to call 988 if you or someone else is experiencing a mental health challenge or crisis?',
+      'What was the most valuable thing you learned during the training? ',
+      'How can we improve this training in the future?',
+    ];
+    const VALUABLE = ['How to spot warning signs', 'What happens when you call 988', 'That you can text 988 too', 'Who answers the call', 'How to start the conversation', 'That 988 is free and confidential'];
+    const IMPROVE = ['More time for questions', 'More examples', 'Shorter slides', 'Add an activity', 'Nothing, it was good', 'Handouts to take home'];
+    const ADULT_ROLES = ['School staff member;', 'Caregiver/parent', 'Other (e.g., community member);', 'Caregiver/parent;Student', 'School staff member'];
+    // [training date, county as typed, group, people, form has quality items, form has call988]
+    const SESSIONS = [
+      ['2026-01-14', 'Anne Arundel', 'Adults', 6, true, false],
+      ['2026-02-10', "Prince George's", 'Adults', 7, false, false],
+      ['2026-03-05', 'Anne Arundel', 'Students', 12, true, false],
+      ['2026-03-19', "Prince George's", 'Students', 8, true, false],
+      ['2026-04-08', 'Montgomery County ', 'Adults', 6, true, true],
+      ['2026-04-22', 'Anne Arundel', 'Students', 12, true, true],
+      ['2026-05-13', "Prince George's ", 'Students', 6, true, true],
+      ['2026-05-20', "Queen Anne's County ", 'Students', 2, true, true],
+    ];
+    const rows = [];
+    let id = 1;
+    for (const [date, county, group, size, hasQuality, hasCall] of SESSIONS) {
+      const train = Date.parse(date + 'T00:00:00Z');
+      const student = group === 'Students';
+      for (let k = 0; k < size; k++) {
+        const start = train + (student ? int(3, 9) : int(0, 2)) * DAY_MS + int(9, 15) * 3600000 + int(0, 3599) * 1000;
+        const preC = student ? 2.6 : 2.3, postC = 3.5, qC = student ? 3.3 : 3.8;
+        rows.push([
+          id++, stamp(start), stamp(start + int(70, 420) * 1000), rand() < 0.1 ? 'Español‎' : 'English‎',
+          student ? (rand() < 0.05 ? 'Student;' : 'Student') : pick(ADULT_ROLES), date, county,
+          lik(KNOW_L, postC), lik(KNOW_L, postC), lik(KNOW_L, postC + 0.2),
+          lik(KNOW_L, preC), lik(KNOW_L, preC - 0.6), lik(KNOW_L, preC - 0.3),
+          hasQuality ? lik(QUAL_L, qC) : null, hasQuality ? lik(QUAL_L, qC + 0.2) : null, hasQuality ? lik(QUAL_L, qC + 0.2) : null,
+          student ? pick([5, 6, 7, 7, 8, 8, 9, 10]) : pick([8, 9, 9, 10, 10, 10]),
+          hasCall ? (student ? pick([4, 5, 6, 7, 8, 9, 10]) : pick([8, 9, 10, 10])) : null,
+          rand() < 0.6 ? pick(VALUABLE) : null, rand() < 0.5 ? pick(IMPROVE) : null,
+        ]);
+      }
+    }
+    // Planted quirks for the data check:
+    rows[30][13] = 'Very agree'; rows[31][14] = 'Very agree'; rows[32][15] = 'Very agree';    // unrecognized label
+    rows[20][2] = stamp(Date.parse(rows[20][1].replace(' ', 'T') + 'Z') + 12000);              // finished in 12 seconds
+    rows[21][5] = null;                                                                         // training date missing
+    rows[22][1] = stamp(Date.parse('2026-04-17T10:00:00Z')); rows[22][2] = stamp(Date.parse('2026-04-17T10:04:00Z')); // > 30 days after
+    rows[23][7] = rows[23][8] = rows[23][9] = 'Disagree'; rows[23][16] = 10;                   // low confidence, recommends 10
+    const dup = rows[24].slice(); dup[0] = id++; dup[18] = dup[18] || VALUABLE[0];             // possible duplicate
+    rows[24][18] = dup[18];
+    dup[1] = stamp(Date.parse(rows[24][1].replace(' ', 'T') + 'Z') + 180000);
+    dup[2] = stamp(Date.parse(dup[1].replace(' ', 'T') + 'Z') + 150000);
+    rows.push(dup);
+    const out = rows[0].slice(); out[0] = id++; out[6] = 'Fairfax County'; out[4] = 'School staff member';  // outside service area
+    out[1] = stamp(Date.parse('2026-01-15T11:00:00Z')); out[2] = stamp(Date.parse('2026-01-15T11:05:00Z'));
+    rows.push(out);
+    return { headers, rows, sheet: 'Synthetic demo data' };
+  }
+
+  /** Same text as checks.py format_report (used to compare against the Python output). */
+  function formatReport(rows, warnings) {
+    const s = summarize(rows);
+    const lines = [`DATA CHECK: ${fmt(s.responses)} responses, ${s.sessions} sessions`,
+      'These are POSSIBLE issues, not confirmed errors. No responses were removed or changed.', ''];
+    if (!warnings.length) lines.push('No issues found.');
+    for (const w of warnings) { lines.push(`[!] ${w.title}: ${fmt(w.count)}`); lines.push(`    ${w.why}`); }
+    return lines.join('\n');
+  }
+
+  g.Core = {
+    FIELDS, FIELD_LABELS, LIKERT, SCALE_NAMES, ITEMS, QUALITY, SERVICE_AREA,
+    normText, toNum, parseDate, readWorkbook, matchColumns, cleanRows, runChecks, summarize, formatReport, fmt,
+    pctAgree, scaleStats, intentGap, computeMetrics, isReferenceFile, selfTest, TOO_FEW, MONTHS,
+    CLEAN_COLS, cleanedCSV, warningsCSV, makeSyntheticData,
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+
+<!-- ============================================================
+     PAGE: upload, data check display.
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  const C = window.Core;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = C.fmt;
+
+  const state = { raw: null, fileName: '', overrides: {}, rows: null, notes: null, warnings: null };
+
+  // ---------- Theme ----------
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') root.dataset.theme = t; } catch (e) { /* storage blocked: follow system */ }
+  $('themeBtn').addEventListener('click', () => {
+    const cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) { /* ignore */ }
+  });
+
+  // ---------- Tabs ----------
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  function showTab(id) {
+    for (const t of tabs) {
+      const on = t.id === 'tab-' + id;
+      t.setAttribute('aria-selected', String(on));
+      $(t.getAttribute('aria-controls')).hidden = !on;
+    }
+    window.scrollTo({ top: 0 });
+    if (id === 'dash' && state.dashDirty) renderDashboard();
+    if (id === 'export') renderExport();
+  }
+  for (const t of tabs) t.addEventListener('click', () => showTab(t.id.replace('tab-', '')));
+
+  // ---------- Upload ----------
+  const drop = $('drop'), input = $('fileInput'), msg = $('uploadMsg');
+  const say = (text, kind) => { msg.innerHTML = text ? `<p class="msg ${kind}">${text}</p>` : ''; };
+
+  input.addEventListener('change', () => { if (input.files[0]) handleFile(input.files[0]); input.value = ''; });
+  ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => { const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
+  // A file dropped anywhere else on the page should not open in the browser.
+  window.addEventListener('dragover', (e) => e.preventDefault());
+  window.addEventListener('drop', (e) => e.preventDefault());
+
+  async function handleFile(file) {
+    if (!/\.(xlsx|xls|csv)$/i.test(file.name)) { say('Please choose an Excel (.xlsx) or .csv file.', 'err'); return; }
+    say('Reading ' + esc(file.name) + '…', 'ok');
+    try {
+      const buf = new Uint8Array(await file.arrayBuffer());
+      const raw = C.readWorkbook(buf, file.name);
+      const { found } = C.matchColumns(raw.headers);
+      if (Object.keys(found).length < 5) {
+        say("This doesn't look like the training survey: fewer than 5 of the expected questions were found. Check that you picked the right file.", 'err');
+        return;
+      }
+      loadRaw(raw, file.name, false);
+      say(`Read ${fmt(raw.rows.length)} responses from ${esc(file.name)}.`, 'ok');
+    } catch (err) {
+      console.error(err);
+      say("Sorry, this file couldn't be read. " + esc(err.message || ''), 'err');
+    }
+  }
+
+  function loadRaw(raw, name, synthetic) {
+    state.raw = raw; state.fileName = name; state.synthetic = synthetic;
+    state.overrides = {}; state.needFilters = true;
+    $('demoBanner').hidden = !synthetic;
+    process();
+    for (const t of ['check', 'dash', 'export']) $('tab-' + t).disabled = false;
+    showTab('check');
+  }
+
+  $('demoBtn').addEventListener('click', () => {
+    loadRaw(C.makeSyntheticData(988), 'Synthetic demo data', true);
+    say('Loaded synthetic demo data (made up, not real responses).', 'ok');
+  });
+
+  // ---------- Clean + check ----------
+  function process() {
+    const { rows, notes } = C.cleanRows(state.raw, state.overrides);
+    state.rows = rows; state.notes = notes;
+    state.warnings = C.runChecks(rows, notes);
+    state.metrics = C.computeMetrics(rows);
+    if (state.needFilters) { setupFilters(); state.needFilters = false; }
+    renderCheck();
+    logSelfTest();
+    state.dashDirty = true;
+    if (!$('panel-dash').hidden) renderDashboard();
+  }
+
+  // Parity self-test: open the browser console (F12) to see PASS/FAIL for every target.
+  // Runs automatically only on the original survey file; window.runSelfTest() forces it.
+  function logSelfTest(force) {
+    if (!state.rows) return;
+    if (!force && !C.isReferenceFile(state.rows, state.notes)) {
+      console.info('[self-test] Skipped: this is not the original survey file (parity targets only apply to it).');
+      return;
+    }
+    const t = C.selfTest(state.metrics);
+    console.groupCollapsed(`[self-test] ${t.passed} of ${t.total} parity checks PASS${t.passed === t.total ? '' : ' (see FAIL rows)'}`);
+    console.table(t.results);
+    console.groupEnd();
+    for (const r of t.results) if (r.result === 'FAIL') console.warn(`[self-test] FAIL ${r.check}: got ${r.got}, expected ${r.target}`);
+    return t;
+  }
+  window.runSelfTest = () => logSelfTest(true);
+
+  // ---------- Dashboard ----------
+  const FEW = C.TOO_FEW;
+  const charts = {};
+  const tok = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const ok = (o) => !!o && o.n >= FEW && o.pct !== null && o.pct !== undefined;
+  const p0 = (v) => Math.round(v) + '%';
+  const p1 = (v) => v.toFixed(1) + '%';
+  const monthLabel = (m) => { if (!/^\d{4}-\d{2}$/.test(m)) return m; const [y, mo] = m.split('-'); return C.MONTHS[+mo - 1] + ' ' + y; };
+  const range = (vals) => { const v = vals.map(Math.round); const lo = Math.min(...v), hi = Math.max(...v); return lo === hi ? lo + '%' : `${lo}–${hi}%`; };
+  const filt = { from: '', to: '', county: '', group: '' };
+  let months = [];
+
+  if (window.Chart) {
+    Chart.defaults.font.family = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+    Chart.defaults.font.size = 12;
+  }
+
+  function setupFilters() {
+    months = [...new Set(state.rows.map((r) => r.month).filter(Boolean))].sort();
+    const mopt = months.map((m) => `<option value="${m}">${esc(monthLabel(m))}</option>`).join('');
+    $('fFrom').innerHTML = mopt; $('fTo').innerHTML = mopt;
+    filt.from = months[0] || ''; filt.to = months[months.length - 1] || '';
+    $('fFrom').value = filt.from; $('fTo').value = filt.to;
+    const cc = {};
+    for (const r of state.rows) { const k = r.county === null ? '__none' : r.county; cc[k] = (cc[k] || 0) + 1; }
+    $('fCounty').innerHTML = '<option value="">All counties</option>' + Object.entries(cc).sort((a, b) => b[1] - a[1])
+      .map(([k, n]) => `<option value="${esc(k)}">${esc(k === '__none' ? 'No county given' : (k || '(blank)'))} (${fmt(n)})</option>`).join('');
+    filt.county = ''; filt.group = 'Everyone';
+    $('fCounty').value = ''; $('fGroup').value = filt.group;
+  }
+
+  function filteredRows() {
+    let [from, to] = [filt.from, filt.to];
+    if (from > to) [from, to] = [to, from];
+    const allDates = from === months[0] && to === months[months.length - 1];
+    return state.rows.filter((r) => {
+      if (!allDates && (!r.month || r.month < from || r.month > to)) return false;
+      if (filt.county && (r.county === null ? '__none' : r.county) !== filt.county) return false;
+      return true;
+    });
+  }
+
+  function groupRows(rows, group = filt.group) {
+    if (group === 'Students' || group === 'Adults') return rows.filter((r) => r.group === group);
+    return rows;
+  }
+
+  for (const [id, key] of [['fFrom', 'from'], ['fTo', 'to'], ['fCounty', 'county'], ['fGroup', 'group']]) {
+    $(id).addEventListener('change', () => { filt[key] = $(id).value; renderDashboard(); });
+  }
+  $('fReset').addEventListener('click', () => { setupFilters(); renderDashboard(); });
+  $('toDash').addEventListener('click', () => showTab('dash'));
+
+  // Value label at the end of each bar; "Too few" text where a value is suppressed.
+  const endLabels = {
+    id: 'endLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      const horizontal = chart.options.indexAxis === 'y';
+      ctx.save();
+      ctx.font = '12px ' + Chart.defaults.font.family;
+      ctx.textBaseline = 'middle';
+      chart.data.datasets.forEach((ds, di) => {
+        const meta = chart.getDatasetMeta(di);
+        if (meta.hidden) return;
+        meta.data.forEach((bar, i) => {
+          const v = ds.data[i], info = (ds.info || [])[i] || {};
+          if (v === null || v === undefined) {
+            ctx.fillStyle = tok('--ink2'); ctx.textAlign = 'left';
+            const room = chart.chartArea.right - chart.scales.x.getPixelForValue(0);
+            const text = !info.n ? 'No answers' : room > 260 ? `Too few responses to compare (n = ${fmt(info.n)})` : `Too few to compare (n = ${fmt(info.n)})`;
+            ctx.fillText(text, chart.scales.x.getPixelForValue(0) + 4, bar.y);
+            return;
+          }
+          ctx.fillStyle = tok('--ink');
+          if (horizontal) { ctx.textAlign = 'left'; ctx.fillText(p0(v), bar.x + 5, bar.y); }
+          else { ctx.textAlign = 'center'; ctx.fillText(p0(v), bar.x, bar.y - 9); }
+        });
+      });
+      ctx.restore();
+    },
+  };
+
+  function wrapLabel(s, width) {
+    const lines = []; let cur = '';
+    for (const w of s.split(' ')) {
+      if (cur && (cur + ' ' + w).length > width) { lines.push(cur); cur = w; } else cur = cur ? cur + ' ' + w : w;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  /** Horizontal % bars (0–100). datasets: [{label, color, data:[pct|null], info:[{k,n}]}] */
+  function hbar(id, labels, datasets, tipWord) {
+    const canvas = $(id);
+    const narrow = window.innerWidth < 560;
+    const per = datasets.length * 18 + 16;
+    canvas.parentElement.style.height = (labels.length * per + 36) + 'px';
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels.map((l) => wrapLabel(l, narrow ? 15 : 24)),
+        datasets: datasets.map((d) => ({
+          label: d.label, data: d.data, info: d.info, backgroundColor: d.color,
+          borderRadius: 4, borderSkipped: 'start', barThickness: 14, categoryPercentage: 0.9, barPercentage: 0.95,
+        })),
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
+        layout: { padding: { right: 40 } },
+        interaction: { mode: 'index', axis: 'y', intersect: false },
+        scales: {
+          x: { min: 0, max: 100, grid: { color: tok('--grid') }, border: { display: false },
+            ticks: { color: tok('--ink2'), stepSize: 25, maxRotation: 0, callback: (v) => v + '%' } },
+          y: { grid: { display: false }, border: { color: tok('--line') }, ticks: { color: tok('--ink'), autoSkip: false } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (items) => [].concat(items[0].label).join(' '),
+              label: (c) => {
+                const info = (c.dataset.info || [])[c.dataIndex] || {};
+                if (c.raw === null || c.raw === undefined) return `${c.dataset.label}: too few responses (n = ${fmt(info.n || 0)})`;
+                return `${c.dataset.label}: ${p1(c.raw)} (${fmt(info.k)} of ${fmt(info.n)} ${tipWord || ''})`.replace(' )', ')');
+              },
+            },
+          },
+        },
+      },
+      plugins: [endLabels],
+    });
+  }
+
+  const cell = (o) => (ok(o) ? `${p1(o.pct)} <span class="muted">(${fmt(o.k)} of ${fmt(o.n)})</span>` : `Too few (n = ${fmt(o ? o.n : 0)})`);
+  const table = (head, body) => `<table class="data"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const tiles = (list) => list.map(([l, v, s]) => `<div class="tile"><div class="l">${esc(l)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
+  const topAsPct = (s) => ({ pct: s.pctTop, k: s.top, n: s.n });
+
+  const KNOW = [['identify', 'Can identify mental health crises'], ['describe', 'Can describe 988 and how it works'], ['when', 'Know when to use 988']];
+  const FEEL = [['q_engaged', 'Presenter engaged participants'], ['q_knew', 'Presenter knew the subject'], ['q_organized', 'Training was well organized']];
+  const IMPROVE_THEMES = [
+    ['More real-world examples and videos', /example|scenario|case stud|real[ -]?life|video|demonstrat|sample|how 988 (?:was|is) used|ejemplo|escenario|caso pr[aá]ctico/i, 'More examples and videos'],
+    ['Add interactive activities or audience participation', /interactiv|activity|activities|activit|role[ -]?play|hands[ -]?on|participat|exercise|game|breakout|ask people questions|audience|actividad|juego/i, 'More activities and participation'],
+    ['Adjust training length and pace', /more time|time for|more question time|longer|shorter|pace|rushed|too fast|too slow|slow down|quick|brief|duration|m[aá]s tiempo|m[aá]s largo|m[aá]s corto|muy r[aá]pido|despacio/i, 'Adjust length and pace'],
+    ['Share 988 with more schools, families, and communities', /more people|more students|more staff|more schools|more communit|reach|outreach|expand|offer.*(school|communit|group)|wider|broader|parents|families|teach.*(school|student)|share.*(information|988)|m[aá]s personas|m[aá]s estudiantes|m[aá]s escuelas|comunidad|ampliar|familias/i, 'Reach more schools and communities'],
+    ['Provide slides, handouts, or take-home resources', /material|handout|resource|slides|brochure|font|readab|print|visual aid|take[ -]?home|follow[ -]?up|ppt|guide|before.*training|access to.*slide|folleto|recursos|materiales|presentaci[oó]n|letra/i, 'Handouts and take-home resources'],
+    ['Include people with lived or service experience', /lived experience|personal stor|personal experienc|someone who has|survivor|first[ -]?hand|individuals? who have received services|people who have received services|experiencia vivida|experiencia personal|historia personal/i, 'Lived-experience speakers'],
+    ['Offer Spanish translation or other language access', /language|translat|spanish|bilingual|interpreter|interpretation|idioma|traducci[oó]n|espa[nñ]ol|biling[uü]e/i, 'Spanish and other languages'],
+    ['Provide food or refreshments', /\bfood\b|\bsnack|\blunch\b|\bmeal\b|\brefreshment|\bcater|donut|coffee|comida|refrigerio|almuerzo/i, 'Food and refreshments'],
+  ];
+  const NO_SUGGESTION = /^(?:(?:nothing|none|no|nope|n\/?a|idk|i don'?t know|no idea|no suggestions?|no changes?)(?:\s*(?:[,!.:-]\s*)?(?:it was|i thought it was|it is|just|thank you|thanks|great|good|fine|perfect|awesome|well done).*)?|(?:it was|this was|everything was|training was|presentation was)\s+(?:great|good|fine|perfect|awesome|excellent)(?:\s+.*)?)[.! ]*$/i;
+
+  function countBar(id, labels, datasets, tipWord) {
+    const canvas = $(id);
+    const narrow = window.innerWidth < 560;
+    const wrappedLabels = labels.map((l) => wrapLabel(l, narrow ? 20 : 32));
+    const maxLabelLines = Math.max(1, ...wrappedLabels.map((label) => label.length));
+    const per = Math.max(datasets.length * 22 + 18, maxLabelLines * 16 + 14);
+    canvas.parentElement.style.height = (labels.length * per + 36) + 'px';
+    if (charts[id]) charts[id].destroy();
+    const max = Math.max(1, ...datasets.flatMap((d) => d.data.filter((v) => v !== null && v !== undefined)));
+    const step = Math.max(1, Math.ceil(max / 4));
+    charts[id] = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: wrappedLabels,
+        datasets: datasets.map((d) => ({
+          label: d.label, data: d.data, info: d.info, backgroundColor: d.color,
+          borderRadius: 4, borderSkipped: 'start', barThickness: 14, categoryPercentage: 0.9, barPercentage: 0.95,
+        })),
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
+        layout: { padding: { right: 12 } },
+        interaction: { mode: 'index', axis: 'y', intersect: false },
+        scales: {
+          x: { beginAtZero: true, suggestedMax: Math.ceil(max / step) * step, grid: { color: tok('--grid') }, border: { display: false },
+            ticks: { color: tok('--ink2'), stepSize: step, precision: 0 } },
+          y: { grid: { display: false }, border: { color: tok('--line') }, ticks: { color: tok('--ink'), autoSkip: false, padding: 8, font: { size: 13 } } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (items) => [].concat(items[0].label).join(' '),
+              label: (c) => {
+                const info = (c.dataset.info || [])[c.dataIndex] || {};
+                if (c.raw === null || c.raw === undefined) return `${c.dataset.label}: too few comments (n = ${fmt(info.n || 0)})`;
+                return `${c.dataset.label}: ${fmt(c.raw)} ${tipWord} (from ${fmt(info.n)} comments)`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function renderDashboard() {
+    if (!state.rows || !window.Chart) return;
+    state.dashDirty = false;
+    const baseRows = filteredRows();
+    const compareMode = filt.group === 'Compare';
+    const rows = groupRows(baseRows, compareMode ? 'Everyone' : filt.group);
+    const m = C.computeMetrics(rows);
+    const a = m.all, s = m.students, ad = m.adults;
+    const displayGroups = compareMode ? ['Students', 'Adults'] : [filt.group];
+    const selectedMetrics = displayGroups.map((group) => ({
+      group,
+      metrics: group === 'Students' ? s : group === 'Adults' ? ad : a,
+    }));
+    const groupLabel = filt.group === 'Compare' ? 'Students and adults compared'
+      : filt.group === 'Everyone' ? 'Everyone (all respondents)' : `${filt.group} only`;
+    $('filterNote').textContent = `Showing ${fmt(rows.length)} of ${fmt(state.rows.length)} responses · ${groupLabel}${baseRows.length !== state.rows.length ? ' · date or county filters on' : ''}.`;
+
+    // Overview tiles
+    const kw = a.know.when;
+    const nps = a.recommend;
+    $('tiles').innerHTML = tiles([
+      ['Responses', fmt(rows.length), `${fmt(m.summary.students)} students · ${fmt(m.summary.adults)} adults`],
+      ['Sessions', fmt(m.summary.sessions), 'training date + county'],
+      ['Know when to use 988 (after)', ok(kw.post) ? p0(kw.post.pct) : 'Too few',
+        ok(kw.post) && ok(kw.pre) ? `up from ${p0(kw.pre.pct)} before · n = ${fmt(kw.post.n)}` : `n = ${fmt(kw.post.n)}`],
+      ['Average knowledge gain', a.gain.n >= FEW ? (a.gain.mean >= 0 ? '+' : '−') + Math.abs(a.gain.mean).toFixed(2) : 'Too few',
+        `points on the 1–5 scale · n = ${fmt(a.gain.n)}`],
+      ['Net Promoter Score', nps.n >= FEW ? (nps.nps >= 0 ? '+' : '−') + Math.abs(nps.nps).toFixed(0) : 'Too few',
+        `% giving 9–10 minus % giving 0–6 · n = ${fmt(nps.n)}`],
+    ]);
+
+    // 1. Knowledge before / after
+    const kn = KNOW.map(([k]) => a.know[k]);
+    hbar('cKnow', KNOW.map(([, l]) => l), [
+      { label: 'Before', color: tok('--before'), data: kn.map((x) => (ok(x.pre) ? x.pre.pct : null)), info: kn.map((x) => x.pre) },
+      { label: 'After', color: tok('--after'), data: kn.map((x) => (ok(x.post) ? x.post.pct : null)), info: kn.map((x) => x.post) },
+    ], 'agree');
+    const knowN = Math.max(...kn.map((x) => x.post.n));
+    $('knowSub').textContent = `% who agree or strongly agree · n = ${fmt(knowN)} responses. "Before" was rated after the training, from memory.`;
+    if (kn.every((x) => ok(x.pre) && ok(x.post))) {
+      const best = KNOW.map(([, l], i) => ({ l, b: kn[i].pre.pct, a: kn[i].post.pct })).sort((x, y) => (y.a - y.b) - (x.a - x.b))[0];
+      $('knowMeans').innerHTML = `<b>What this means</b>After the training, ${range(kn.map((x) => x.post.pct))} agree with each statement, up from ${range(kn.map((x) => x.pre.pct))} before. The biggest jump is "${esc(best.l.toLowerCase())}" (${p0(best.b)} → ${p0(best.a)}). People rated "before" after the training, so the real gain may be smaller.`;
+    } else $('knowMeans').innerHTML = '<b>What this means</b>Too few responses to compare with these filters.';
+    $('knowTable').innerHTML = table(['Question', 'Before', 'After'], KNOW.map(([, l], i) => [esc(l), cell(kn[i].pre), cell(kn[i].post)]));
+
+    // 2. Training ratings by the selected demographic group(s)
+    const groupColor = (group) => group === 'Students' ? tok('--student') : group === 'Adults' ? tok('--adult') : tok('--after');
+    const groupDatasets = (getStats) => selectedMetrics.map(({ group, metrics }) => {
+      const info = getStats(metrics);
+      return {
+        label: group, color: groupColor(group),
+        data: info.map((x) => (ok(x) ? x.pct : null)), info,
+      };
+    });
+    const knowledgeGroups = groupDatasets((g) => KNOW.map(([k]) => g.know[k].post));
+    hbar('cSame', KNOW.map(([, l]) => l), knowledgeGroups, 'agree');
+    const feelRows = (g) => [...FEEL.map(([q]) => g.quality[q]), topAsPct(g.recommend), topAsPct(g.call988)];
+    const feelLabels = [...FEEL.map(([, l]) => l), 'Would recommend (gave 9–10)', 'Likely to call 988 (gave 9–10)'];
+    const groupFeel = selectedMetrics.map(({ group, metrics }) => ({ group, metrics, stats: feelRows(metrics) }));
+    hbar('cFeel', feelLabels, groupFeel.map(({ group, stats }) => ({
+      label: group, color: groupColor(group),
+      data: stats.map((x) => (ok(x) ? x.pct : null)), info: stats,
+    })));
+    $('svaTitle').textContent = compareMode ? 'Students vs. adults: same learning, different feelings' : `Learning and training ratings: ${filt.group}`;
+    $('svaLegend').innerHTML = displayGroups.map((group) =>
+      `<span><i style="background:${groupColor(group)}"></i>${esc(group)}</span>`).join('');
+    $('svaSub').textContent = `${selectedMetrics.map(({ group, metrics }) => `${group} n = ${fmt(metrics.n)}`).join(' · ')}. Fewer people answered some questions; hover a bar or open the table for exact counts.`;
+    const compare = (sv, av, more, less, same) => (sv - av >= 5 ? more : av - sv >= 5 ? less : same);
+    const studentStats = groupFeel.find((g) => g.group === 'Students')?.stats;
+    const adultStats = groupFeel.find((g) => g.group === 'Adults')?.stats;
+    if (compareMode && studentStats && adultStats && studentStats.slice(0, 3).every(ok) && adultStats.slice(0, 3).every(ok)
+      && ok(studentStats[3]) && ok(adultStats[3])) {
+      const sk = KNOW.map(([k]) => s.know[k].post), ak = KNOW.map(([k]) => ad.know[k].post);
+      const sf = studentStats, af = adultStats;
+      const knowGap = Math.max(...sk.map((x, i) => Math.abs(x.pct - ak[i].pct)));
+      const sameTxt = knowGap < 5
+        ? `After the training, students and adults agree at similar rates (students ${range(sk.map((x) => x.pct))}, adults ${range(ak.map((x) => x.pct))}).`
+        : `After the training, students and adults differ by up to ${Math.round(knowGap)} points on the knowledge questions.`;
+      const presOk = FEEL.every((_, i) => ok(sf[i]) && ok(af[i]));
+      const presTxt = presOk ? ` Students rated the presenter items ${compare(mean3(sf), mean3(af), 'higher than', 'lower than', 'about the same as')} adults (${range(sf.slice(0, 3).map((x) => x.pct))} vs ${range(af.slice(0, 3).map((x) => x.pct))}), and` : ' Students';
+      $('svaMeans').innerHTML = `<b>What this means</b>${sameTxt}${presTxt} gave 9–10 on "would recommend" ${compare(sf[3].pct, af[3].pct, 'more often than', 'less often than', 'about as often as')} adults (${p0(sf[3].pct)} vs ${p0(af[3].pct)}). Students and adults mostly attended different sessions, so this compares different trainings as well as different people.`;
+    } else {
+      const g = groupFeel[0];
+      const after = KNOW.map(([k]) => g.metrics.know[k].post);
+      $('svaMeans').innerHTML = after.every(ok)
+        ? `<b>What this means</b>For ${esc(g.group.toLowerCase())}, ${range(after.map((x) => x.pct))} agree with the three knowledge statements after the training.`
+        : '<b>What this means</b>Too few responses to summarize this group.';
+    }
+    $('svaTable').innerHTML = table(['Question', ...displayGroups.map(esc)],
+      [...KNOW.map(([, l], i) => [esc('After: ' + l.toLowerCase()), ...selectedMetrics.map(({ metrics }) => cell(metrics.know[KNOW[i][0]].post))]),
+        ...feelLabels.map((l, i) => [esc(l), ...groupFeel.map((g) => cell(g.stats[i]))]),
+        ['Average "would recommend" (0–10)', ...selectedMetrics.map(({ metrics }) => metrics.recommend.n >= FEW ? `${metrics.recommend.mean.toFixed(2)} <span class="muted">(n = ${fmt(metrics.recommend.n)})</span>` : 'Too few')],
+        ['Net Promoter Score', ...selectedMetrics.map(({ metrics }) => (metrics.recommend.n >= FEW
+          ? `${metrics.recommend.nps >= 0 ? '+' : '−'}${Math.abs(metrics.recommend.nps).toFixed(1)} <span class="muted">(n = ${fmt(metrics.recommend.n)})</span>` : 'Too few'))]]);
+
+    // Theme-coded improvement comments use the same selected demographic group(s) as every chart.
+    const improveColors = { Students: tok('--student'), Adults: tok('--adult'), Everyone: tok('--after') };
+    const themeStats = displayGroups.map((group) => {
+      const comments = rows.filter((r) => (group === 'Everyone' || r.group === group) && r.improve);
+      const suggestions = comments.filter((r) => !NO_SUGGESTION.test(r.improve));
+      const counts = IMPROVE_THEMES.map(([, pattern]) => suggestions.filter((r) => pattern.test(r.improve)).length);
+      return { group, n: comments.length, counts };
+    });
+    const themeIndices = IMPROVE_THEMES
+      .map((_, i) => i)
+      .filter((i) => themeStats.some((g) => g.counts[i] > 0))
+      .sort((aTheme, bTheme) => {
+        const total = (i) => themeStats.reduce((sum, g) => sum + (g.n >= FEW ? g.counts[i] : 0), 0);
+        return total(bTheme) - total(aTheme) || aTheme - bTheme;
+      });
+    const themeLabels = themeIndices.map((i) => IMPROVE_THEMES[i][2]);
+    const themeData = themeStats.map((g) => ({
+      label: g.group,
+      color: improveColors[g.group],
+      data: themeIndices.map((i) => g.n >= FEW ? g.counts[i] : null),
+      info: themeIndices.map((i) => ({ k: g.counts[i], n: g.n })),
+    }));
+    $('improveLegend').innerHTML = displayGroups.map((group) =>
+      `<span><i style="background:${improveColors[group]}"></i>${displayGroups.length > 1 ? esc(group) : 'Mentions'}</span>`).join('');
+    countBar('cImprove', themeLabels, themeData, 'mentions');
+    const noSuggestionCounts = displayGroups.map((group) => {
+      const count = rows.filter((r) => (group === 'Everyone' || r.group === group) && r.improve && NO_SUGGESTION.test(r.improve)).length;
+      return `${group}: ${fmt(count)} said no changes`;
+    });
+    $('improveSub').textContent = `Based on the survey's "How can we improve this training?" responses. Approximate theme mentions, ordered most to least · ${themeStats.map((g) => `${g.group} n = ${fmt(g.n)} written comments`).join(' · ')}. ${noSuggestionCounts.join(' · ')} and are excluded from suggestion themes. Comments may match multiple themes; date and county filters apply.`;
+    const themeTableRows = themeStats.flatMap((g) => themeIndices.map((themeIndex) => [
+      esc(IMPROVE_THEMES[themeIndex][0]), esc(g.group), g.n >= FEW
+        ? `${fmt(g.counts[themeIndex])} <span class="muted">(of ${fmt(g.n)} comments)</span>`
+        : `Too few comments (n = ${fmt(g.n)})`,
+    ]));
+    $('improveTable').innerHTML = table(['Theme', 'Group', 'Approximate mentions'], themeTableRows);
+    const topTheme = (g) => {
+      if (g.n < FEW) return null;
+      if (!themeIndices.length) return null;
+      const top = Math.max(...themeIndices.map((i) => g.counts[i]));
+      if (!top) return null;
+      return { label: IMPROVE_THEMES[g.counts.indexOf(top)][0], count: top };
+    };
+    const topSummaries = themeStats.map((g) => {
+      const top = topTheme(g);
+      return top ? `${g.group.toLowerCase()}: "${top.label}" (${fmt(top.count)} mentions)` : null;
+    }).filter(Boolean);
+    $('improveMeans').innerHTML = `<b>What this means</b>${topSummaries.length
+      ? `Most-mentioned theme${topSummaries.length > 1 ? 's' : ''}: ${topSummaries.join('; ')}.`
+      : themeIndices.length
+        ? 'Too few written comments to summarize these recommendations (at least 10 per group are needed).'
+        : 'No comments matched the listed themes for this group selection.'} Themes are assigned by matching keywords in English or Spanish; one comment may appear in multiple themes.`;
+
+    // 3. Intent gap
+    const gapStats = selectedMetrics.map(({ group, metrics }) => ({ group, stats: metrics.intentGap, metrics }));
+    hbar('cGap', displayGroups, [{
+      label: 'Rated calling 6 or below', color: displayGroups.map(groupColor),
+      data: gapStats.map(({ stats }) => (ok(stats) ? stats.pct : null)),
+      info: gapStats.map(({ stats }) => stats),
+    }]);
+    const asked = m.caveats.callAsked;
+    if (compareMode && gapStats.length === 2 && gapStats.every(({ stats }) => ok(stats))) {
+      const gs = gapStats[0].stats, ga = gapStats[1].stats;
+      $('gapMeans').innerHTML = `<b>What this means</b>${p0(gs.pct)} of students who say they know when to use 988 rated their chance of calling 988 at 6 or below (${fmt(gs.k)} of ${fmt(gs.n)}), compared with ${p0(ga.pct)} of adults (${fmt(ga.k)} of ${fmt(ga.n)}). Knowing when to use 988 doesn't always mean feeling ready to call. This question was on only ${p0(rows.length ? asked / rows.length * 100 : 0)} of forms${ga.n < 50 ? `, and the adult figure rests on just ${fmt(ga.n)} people` : ''}.`;
+    } else if (gapStats.length === 1 && ok(gapStats[0].stats)) {
+      const { group, stats } = gapStats[0];
+      $('gapMeans').innerHTML = `<b>What this means</b>${p0(stats.pct)} of ${group.toLowerCase()} who say they know when to use 988 rated their chance of calling 988 at 6 or below (${fmt(stats.k)} of ${fmt(stats.n)}).`;
+    } else $('gapMeans').innerHTML = '<b>What this means</b>Too few people answered "how likely are you to call 988" with these filters.';
+    $('gapTable').innerHTML = table(['Group', 'Rated calling 6 or below', 'Average likelihood to call (0–10)'],
+      gapStats.map(({ group, stats, metrics }) => [esc(group), cell(stats),
+        metrics.call988.n >= FEW ? `${metrics.call988.mean.toFixed(2)} <span class="muted">(n = ${fmt(metrics.call988.n)})</span>` : 'Too few']));
+
+    // 4. Recommendation scores by county, using the same selected demographic group(s).
+    $('countyTitle').textContent = compareMode ? 'Students vs. adults by county' : `Would recommend by county: ${filt.group}`;
+    $('countySub').textContent = '% giving 9–10 on "would you recommend this training". Groups with fewer than 10 respondents in a county are not compared.';
+    const countyNames = [...new Set(rows.map((r) => r.county === null ? 'No county given' : (r.county || '(blank)')))]
+      .sort((aCounty, bCounty) => {
+        const n = (county, group) => rows.filter((r) => (r.county === null ? 'No county given' : (r.county || '(blank)')) === county
+          && (group === 'Everyone' || r.group === group)).length;
+        return displayGroups.reduce((total, group) => total + n(bCounty, group), 0)
+          - displayGroups.reduce((total, group) => total + n(aCounty, group), 0) || aCounty.localeCompare(bCounty);
+      });
+    const countyData = selectedMetrics.map(({ group }) => {
+      const byCounty = countyNames.map((county) => {
+        const countyRows = rows.filter((r) => (r.county === null ? 'No county given' : (r.county || '(blank)')) === county
+          && (group === 'Everyone' || r.group === group));
+        return C.scaleStats(countyRows, 'recommend');
+      });
+      return {
+        label: group, color: groupColor(group),
+        data: byCounty.map((stats) => stats.n >= FEW ? stats.pctTop : null),
+        info: byCounty.map((stats) => ({ k: stats.top, n: stats.n })),
+      };
+    });
+    hbar('cCounty', countyNames, countyData);
+    const countyTableRows = selectedMetrics.flatMap(({ group }) => countyNames.map((county) => {
+      const countyRows = rows.filter((r) => (r.county === null ? 'No county given' : (r.county || '(blank)')) === county
+        && (group === 'Everyone' || r.group === group));
+      const stats = C.scaleStats(countyRows, 'recommend');
+      return stats.n < FEW
+        ? [esc(county), esc(group), fmt(countyRows.length), 'Too few to compare', '']
+        : [esc(county), esc(group), fmt(countyRows.length), stats.mean.toFixed(2), cell(topAsPct(stats))];
+    }));
+    $('countyTable').innerHTML = table(['County', 'Group', 'Respondents', 'Average recommend (0–10)', 'Gave 9–10'], countyTableRows);
+    const countySummaries = selectedMetrics.map(({ group }) => {
+      const available = countyNames.map((county) => {
+        const countyRows = rows.filter((r) => (r.county === null ? 'No county given' : (r.county || '(blank)')) === county
+          && (group === 'Everyone' || r.group === group));
+        return { county, stats: C.scaleStats(countyRows, 'recommend') };
+      }).filter((item) => item.stats.n >= FEW).sort((x, y) => x.stats.pctTop - y.stats.pctTop);
+      if (!available.length) return `${group}: too few responses in every county to compare`;
+      if (available.length === 1) return `${group}: ${p0(available[0].stats.pctTop)} gave 9–10 in ${esc(available[0].county)} (n = ${fmt(available[0].stats.n)})`;
+      return `${group}: ${esc(available[0].county)} was lowest (${p0(available[0].stats.pctTop)}) and ${esc(available[available.length - 1].county)} highest (${p0(available[available.length - 1].stats.pctTop)})`;
+    });
+    $('countyMeans').innerHTML = `<b>What this means</b>${countySummaries.join('; ')}. Counties can differ because of different schools, presenters or sessions, not the county itself.`;
+
+    // 5. Coverage by month
+    const cov = m.coverage;
+    if (charts.cCov) charts.cCov.destroy();
+    $('covLegend').innerHTML = selectedMetrics.map(({ group }) =>
+      `<span><i style="background:${groupColor(group)}"></i>${esc(group)}</span>`).join('');
+    charts.cCov = new Chart($('cCov'), {
+      type: 'bar',
+      data: {
+        labels: cov.map((c) => monthLabel(c.month)),
+        datasets: selectedMetrics.map(({ group }) => ({
+          label: group,
+          data: cov.map((c) => group === 'Students' ? c.students : group === 'Adults' ? c.n - c.students : c.n),
+          backgroundColor: groupColor(group), borderRadius: 2, borderColor: tok('--surface'),
+          borderWidth: { top: 2 }, borderSkipped: 'start',
+        })),
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { stacked: true, grid: { display: false }, border: { color: tok('--line') }, ticks: { color: tok('--ink2'), maxRotation: 60 } },
+          y: { stacked: true, grid: { color: tok('--grid') }, border: { display: false }, ticks: { color: tok('--ink2'), precision: 0 } },
+        },
+        plugins: { legend: { display: false }, tooltip: { callbacks: { footer: (items) => `Selected group total: ${fmt(cov[items[0].dataIndex].n)}` } } },
+      },
+    });
+    $('covSub').textContent = `${groupLabel} responses per month by survey start date · n = ${fmt(rows.length)}.`;
+    const covCols = [['post_when', 'Knowledge'], ['q_engaged', 'Presenter'], ['recommend', 'Recommend'], ['call988', 'Call 988'], ['improve', 'Comment']];
+    $('covTable').innerHTML = `<table class="data heat"><thead><tr><th>Month</th><th>Responses</th>${covCols.map(([, h]) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${cov.map((c) => `<tr><td>${esc(monthLabel(c.month))}</td><td>${fmt(c.n)}</td>${covCols.map(([f]) => {
+      const pc = c.n ? c.answered[f] / c.n * 100 : 0;
+      return `<td class="cell" style="background:color-mix(in srgb, var(--after) ${Math.round(pc * 0.4)}%, transparent)" title="${fmt(c.answered[f])} of ${fmt(c.n)}">${Math.round(pc)}%</td>`;
+    }).join('')}</tr>`).join('')}</tbody></table>`;
+    const callMonths = cov.filter((c) => c.answered.call988 > 0).length;
+    const presGaps = cov.filter((c) => c.n >= FEW && c.answered.q_engaged / c.n < 0.2).map((c) => monthLabel(c.month));
+    $('covMeans').innerHTML = `<b>What this means</b>Not every question was on every version of the form. "Likely to call 988" was answered on ${fmt(asked)} of ${fmt(rows.length)} responses (${p0(rows.length ? asked / rows.length * 100 : 0)}), in ${callMonths} of ${cov.length} months, so results for that question describe only those forms.${presGaps.length ? ` The presenter questions were mostly blank in ${esc(presGaps.join(', '))}.` : ''}`;
+
+    // Caveats
+    const cv = m.caveats;
+    const items = ['"Before" ratings were given after the training, from memory, so knowledge gains may be overstated.'];
+    if (cv.students && ad.n) items.push(`${fmt(cv.studentsNoAdults)} of ${fmt(cv.students)} students (${p0(cv.studentsNoAdults / cv.students * 100)}) were in sessions (same date and county) with no adults recorded. Even a shared date and county may be two different trainings. Students and adults mostly attended different trainings, so differences may reflect the session as well as the person.`);
+    if (cv.delayStudents !== null && cv.delayAdults !== null && cv.students >= FEW && ad.n >= FEW) items.push(`Student surveys were submitted a median of ${fmt(cv.delayStudents)} days after the training, vs. ${fmt(cv.delayAdults)} for adults. If student surveys were typed in later (for example from paper), timing and speed checks mean less for them.`);
+    items.push(`"Likely to call 988" was on only ${p0(rows.length ? asked / rows.length * 100 : 0)} of forms (${fmt(asked)} of ${fmt(rows.length)}).`);
+    items.push('The survey has no demographic questions (such as age, race or gender), so we can\'t check whether results differ between communities.');
+    const excluded = Object.entries(state.notes.unknown_labels).filter(([l]) => !(state.notes.overrides[l] >= 1)).reduce((t, [, n]) => t + n, 0);
+    if (excluded) items.push(`${fmt(excluded)} answers with unrecognized labels are left out of the results (see Data check).`);
+    items.push('These results describe who answered the survey. They show differences between groups; they don\'t prove what caused them.');
+    $('caveats').innerHTML = items.map((x) => `<li>${esc(x)}</li>`).join('');
+  }
+  const mean3 = (arr) => (arr[0].pct + arr[1].pct + arr[2].pct) / 3;
+
+  // ---------- Export ----------
+  const baseName = () => (state.synthetic ? 'SYNTHETIC_demo_data' : (state.fileName || 'survey').replace(/\.[^.]+$/, '').replace(/[^\w.-]+/g, '_'));
+  function download(name, text) {
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function filterText() {
+    const parts = [];
+    if (filt.from !== months[0] || filt.to !== months[months.length - 1]) parts.push(`${monthLabel(filt.from)} – ${monthLabel(filt.to)}`);
+    if (filt.county) parts.push(filt.county === '__none' ? 'No county given' : filt.county);
+    if (filt.group !== 'Everyone') parts.push(filt.group === 'Compare' ? 'Compare students and adults' : filt.group + ' only');
+    return parts.length ? 'Filters: ' + parts.join(', ') : 'No filters (all responses)';
+  }
+  function renderExport() {
+    if (!state.rows) return;
+    const mapped = Object.keys(state.overrides).length;
+    $('exCleanInfo').textContent = `All ${fmt(state.rows.length)} responses, one row each. Nothing is removed. Includes the tidied answers, the 1–5 scores, the student/adult group, the session, and a "possible_issues" column for each row.`
+      + (mapped ? ` Uses your choices for ${mapped} unrecognized answer label${mapped > 1 ? 's' : ''}.` : ' Unrecognized answer labels are left blank in the score columns (their original text is kept for presenter questions).');
+    const rowLines = state.warnings.reduce((t, w) => t + w.rows.length, 0);
+    $('exWarnInfo').textContent = `${state.warnings.length} possible issues, one line per affected response (${fmt(rowLines)} lines), with the row number in your file so you can look each one up. Nothing was removed or changed.`;
+    $('exPrintInfo').textContent = `Key numbers, students vs. adults, the intent gap, counties, the possible issues, and the cautions, on one page. Uses the current dashboard filters. ${filterText()}.`;
+  }
+  $('dlClean').addEventListener('click', () => download(baseName() + '_cleaned.csv', C.cleanedCSV(state.rows, state.warnings)));
+  $('dlWarn').addEventListener('click', () => download(baseName() + '_possible_issues.csv', C.warningsCSV(state.rows, state.warnings)));
+
+  function buildPrint() {
+    if (!state.rows) { $('printArea').innerHTML = ''; return; }
+    if (state.dashDirty || !$('tiles').innerHTML) renderDashboard();
+    const baseRows = filteredRows();
+    const rows = groupRows(baseRows, filt.group === 'Compare' ? 'Everyone' : filt.group);
+    const m = C.computeMetrics(rows), s = m.students, ad = m.adults, a = m.all;
+    const meansOf = (id) => esc($(id).textContent.replace(/^What this means/, '').trim());
+    const v = (o) => (ok(o) ? `${p1(o.pct)} <span>(n=${fmt(o.n)})</span>` : 'Too few');
+    const sign = (x) => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(1);
+    const keys = [...$('tiles').querySelectorAll('.tile')].map((t) =>
+      `<div>${esc(t.querySelector('.l').textContent)}<b>${esc(t.querySelector('.v').textContent)}</b><span>${esc(t.querySelector('.s').textContent)}</span></div>`).join('');
+    const tr = (cells) => `<tr>${cells.map((c) => `<td>${c}</td>`).join('')}</tr>`;
+    const svaRows = [
+      ...KNOW.map(([k, l]) => tr([esc('After: ' + l.toLowerCase()), v(s.know[k].post), v(ad.know[k].post)])),
+      ...FEEL.map(([q, l]) => tr([esc(l), v(s.quality[q]), v(ad.quality[q])])),
+      tr(['Would recommend: gave 9–10', v(topAsPct(s.recommend)), v(topAsPct(ad.recommend))]),
+      tr(['Net Promoter Score', s.recommend.n >= FEW ? sign(s.recommend.nps) : 'Too few', ad.recommend.n >= FEW ? sign(ad.recommend.nps) : 'Too few']),
+      tr(['Likely to call 988: gave 9–10', v(topAsPct(s.call988)), v(topAsPct(ad.call988))]),
+      tr(['Intent gap (know when, call ≤ 6)', v(s.intentGap), v(ad.intentGap)]),
+    ].join('');
+    const county = m.studentCounties.map((c) => tr([esc(c.county), fmt(c.n),
+      c.tooFew || c.recommend.n < FEW ? 'Too few to compare' : c.recommend.mean.toFixed(2),
+      c.tooFew || c.recommend.n < FEW ? '' : p1(c.recommend.pctTop)])).join('');
+    const warns = state.warnings.map((w) => `<li>${esc(w.title)}: <b>${fmt(w.count)}</b></li>`).join('');
+    const today = new Date().toISOString().slice(0, 10);
+    $('printArea').innerHTML = `
+      <h1>988 Training Insights: summary${state.synthetic ? ' (SYNTHETIC DEMO DATA)' : ''}</h1>
+      ${state.synthetic ? '<p class="banner-p">Synthetic demo data: made-up responses created to show how the tool works. These are not real survey results.</p>' : ''}
+      <p class="meta">${esc(state.fileName)} · survey dates ${esc(m.summary.range)} · ${esc(filterText())} · created ${today}</p>
+      <div class="keys">${keys}</div>
+      <div class="cols">
+        <div class="blk"><h2>Knowledge before and after (% agree)</h2>
+          <table><thead><tr><th>Question <span>(n=${fmt(Math.max(...KNOW.map(([k]) => a.know[k].post.n)))})</span></th><th>Before</th><th>After</th></tr></thead><tbody>
+          ${KNOW.map(([k, l]) => tr([esc(l), ok(a.know[k].pre) ? p1(a.know[k].pre.pct) : 'Too few', ok(a.know[k].post) ? p1(a.know[k].post.pct) : 'Too few'])).join('')}</tbody></table>
+          <p>${meansOf('knowMeans')}</p></div>
+        <div class="blk"><h2>Students vs. adults: same learning, different feelings</h2>
+          <table><thead><tr><th></th><th>Students (n=${fmt(s.n)})</th><th>Adults (n=${fmt(ad.n)})</th></tr></thead><tbody>${svaRows}</tbody></table>
+          <p>${meansOf('svaMeans')}</p></div>
+        <div class="blk"><h2>The intent gap</h2><p>${meansOf('gapMeans')}</p></div>
+        <div class="blk"><h2>Students by county (would recommend)</h2>
+          ${county ? `<table><thead><tr><th>County</th><th>Students</th><th>Average (0–10)</th><th>Gave 9–10</th></tr></thead><tbody>${county}</tbody></table>` : ''}
+          <p>${meansOf('countyMeans')}</p></div>
+        <div class="blk"><h2>Possible issues in the data (whole file)</h2>
+          <p class="banner-p">These are POSSIBLE issues, not confirmed errors. No responses were removed or changed.</p>
+          <ul>${warns || '<li>No possible issues found.</li>'}</ul></div>
+        <div class="blk split"><h2>Read with care</h2><ul>${$('caveats').innerHTML}</ul></div>
+      </div>
+      <p class="foot">Created with 988 Training Insights in a web browser. The survey file never left this computer. "Agree" = agree or strongly agree. Groups with fewer than 10 people are not compared.</p>`;
+  }
+  window.addEventListener('beforeprint', buildPrint);
+  $('printBtn').addEventListener('click', () => { buildPrint(); window.print(); });
+
+  // Re-draw charts when the theme or the screen size class changes (charts read the color tokens).
+  const redraw = () => { if (state.rows && !$('panel-dash').hidden) renderDashboard(); else state.dashDirty = true; };
+  $('themeBtn').addEventListener('click', redraw);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw);
+  let narrowNow = window.innerWidth < 560;
+  window.addEventListener('resize', () => { const n = window.innerWidth < 560; if (n !== narrowNow) { narrowNow = n; redraw(); } });
+
+  function renderCheck() {
+    const { rows, notes, warnings } = state;
+    const s = C.summarize(rows);
+
+    $('summaryCard').innerHTML = `
+      <h2>What's in this file</h2>
+      <p class="muted small" style="margin-top:0">${esc(state.fileName)} · sheet "${esc(notes.sheet)}"</p>
+      <div class="stats">
+        <div><b>${fmt(s.responses)}</b>responses</div>
+        <div><b>${fmt(s.sessions)}</b>sessions <span class="small muted">(date + county)</span></div>
+        <div><b>${fmt(s.students)}</b>students</div>
+        <div><b>${fmt(s.adults)}</b>adults</div>
+        <div><b>${esc(s.range)}</b>survey dates</div>
+      </div>`;
+
+    // Unrecognized labels: one dropdown each (default Exclude).
+    const labels = Object.entries(notes.unknown_labels);
+    const lc = $('labelsCard');
+    lc.hidden = !labels.length;
+    if (labels.length) {
+      const opts = [['', 'Exclude (leave out)'], ...[5, 4, 3, 2, 1].map((v) => [String(v), 'Count as "' + C.SCALE_NAMES[v] + '"'])];
+      lc.innerHTML = `
+        <h2>Answers we didn't recognize</h2>
+        <p class="muted" style="margin-top:0">These answers aren't on the agree/disagree scale, so they're left out of results by default. If you know what a label meant, choose a match and every result updates. We don't guess for you.</p>
+        ${labels.map(([label, n], i) => `
+          <div class="labelrow">
+            <div class="lbl"><strong>"${esc(label)}"</strong> · ${fmt(n)} answers<br>
+              <span class="small muted">In: ${esc(notes.unknown_where[label].map((f) => C.FIELD_LABELS[f]).join('; '))}</span></div>
+            <label class="small"><span class="muted">Treat as </span>
+              <select data-label-index="${i}">
+                ${opts.map(([v, t]) => `<option value="${v}"${String(state.overrides[label] || '') === v ? ' selected' : ''}>${esc(t)}</option>`).join('')}
+              </select></label>
+          </div>`).join('')}`;
+      lc.querySelectorAll('select').forEach((sel) => sel.addEventListener('change', () => {
+        const label = labels[+sel.dataset.labelIndex][0];
+        if (sel.value) state.overrides[label] = Number(sel.value); else delete state.overrides[label];
+        process();
+      }));
+    }
+
+    $('warnCard').innerHTML = `
+      <h2>Possible issues</h2>
+      <div class="banner">These are POSSIBLE issues, not confirmed errors. No responses were removed or changed.</div>
+      ${warnings.length ? `<ul class="warns">${warnings.map((w) => `
+        <li><div class="wcount">${fmt(w.count)}</div>
+            <div class="wbody"><strong>${esc(w.title)}</strong><p>${esc(w.why)}</p></div></li>`).join('')}</ul>`
+        : '<p class="msg ok">No possible issues found.</p>'}`;
+
+    const f = notes.fixes;
+    const fixes = [];
+    fixes.push(`Matched ${Object.keys(notes.found).length} of ${Object.keys(C.FIELDS).length} questions by their wording.`);
+    if (f.cellsTidied || f.headersTidied) fixes.push(`Removed hidden characters and extra spaces from ${fmt(f.cellsTidied)} answers${f.headersTidied ? ` and ${fmt(f.headersTidied)} column headings` : ''}.`);
+    if (f.neitherOr) fixes.push(`Read ${fmt(f.neitherOr)} "Neither agree or disagree" answers as "Neither agree nor disagree" (same meaning, different form wording).`);
+    if (f.countyRaw > f.countyClean) fixes.push(`Combined ${f.countyRaw} different county spellings into ${f.countyClean} counties (e.g. "Montgomery County " → "Montgomery").`);
+    if (f.multiRole) fixes.push(`${fmt(f.multiRole)} people chose more than one role; they're grouped as "Multiple" and counted as adults.`);
+    if (f.badDates) fixes.push(`${fmt(f.badDates)} training dates couldn't be read and are treated as missing.`);
+    fixes.push('Students = people who chose only "Student". Everyone else is counted as an adult.');
+
+    $('fixCard').innerHTML = `
+      <h2>Tidied automatically</h2>
+      <ul class="fixes">${fixes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+      <details style="margin-top:12px"><summary>Which column was used for each question</summary>
+        <div class="tbl-scroll"><table class="cols"><thead><tr><th>Question</th><th>Column in your file</th></tr></thead><tbody>
+        ${Object.keys(C.FIELDS).map((k) => `<tr><td>${esc(C.FIELD_LABELS[k])}</td>${k in notes.found
+          ? `<td>${esc(C.normText(notes.foundHeaders[k]) || '')}</td>` : '<td class="miss">Not found</td>'}</tr>`).join('')}
+        </tbody></table></div></details>`;
+  }
+})();
+</script>
+</body>
+</html>

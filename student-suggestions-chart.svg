@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="title desc">
+  <title id="title">Themes in students' written training suggestions</title>
+  <desc id="desc">Among 457 student comments with suggestions, the most frequent theme was a request for more detail about 988. Other comments asked who answers, how often people call, how to contact 988, and suggested outreach, examples, activities, or pace changes. Themes overlap.</desc>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #202124; }
+    .title { font-size: 21px; font-weight: 700; }
+    .subtitle { font-size: 13px; fill: #555; }
+    .label { font-size: 13px; }
+    .value { font-size: 12px; font-weight: 700; fill: #a9431d; }
+    .tick { font-size: 11px; fill: #666; }
+    .note { font-size: 11.5px; fill: #555; }
+    .grid { stroke: #e4e4e1; stroke-width: 1; }
+  </style>
+  <rect width="960" height="390" fill="#fff"/>
+  <text class="title" x="24" y="31">What students suggest for improving training</text>
+  <text class="subtitle" x="24" y="52">Approximate keyword matches in 457 written suggestions from students; counts are comments, not people surveyed.</text>
+
+  <g aria-hidden="true">
+    <line class="grid" x1="370" y1="68" x2="370" y2="304"/>
+    <line class="grid" x1="470" y1="68" x2="470" y2="304"/>
+    <line class="grid" x1="570" y1="68" x2="570" y2="304"/>
+    <line class="grid" x1="670" y1="68" x2="670" y2="304"/>
+    <line class="grid" x1="770" y1="68" x2="770" y2="304"/>
+    <text class="tick" x="370" y="320" text-anchor="middle">0</text>
+    <text class="tick" x="470" y="320" text-anchor="middle">30</text>
+    <text class="tick" x="570" y="320" text-anchor="middle">60</text>
+    <text class="tick" x="670" y="320" text-anchor="middle">90</text>
+    <text class="tick" x="770" y="320" text-anchor="middle">120 comments</text>
+  </g>
+
+  <g>
+    <text class="label" x="24" y="84">More detail about 988 / questions*</text>
+    <rect x="370" y="70" width="373.3" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="751" y="84">112 (24.5%)</text>
+
+    <text class="label" x="24" y="114">Who answers calls or texts</text>
+    <rect x="370" y="100" width="136.7" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="515" y="114">41 (9.0%)</text>
+
+    <text class="label" x="24" y="144">How often people call / usage</text>
+    <rect x="370" y="130" width="116.7" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="495" y="144">35 (7.7%)</text>
+
+    <text class="label" x="24" y="174">How to call or text 988</text>
+    <rect x="370" y="160" width="110" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="488" y="174">33 (7.2%)</text>
+
+    <text class="label" x="24" y="204">Reach more schools / community</text>
+    <rect x="370" y="190" width="40" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="418" y="204">12 (2.6%)</text>
+
+    <text class="label" x="24" y="234">More real-world examples / videos</text>
+    <rect x="370" y="220" width="36.7" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="415" y="234">11 (2.4%)</text>
+
+    <text class="label" x="24" y="264">Activities / audience participation</text>
+    <rect x="370" y="250" width="30" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="408" y="264">9 (2.0%)</text>
+
+    <text class="label" x="24" y="294">More time / change the pace</text>
+    <rect x="370" y="280" width="20" height="18" rx="4" fill="#eb6834"/>
+    <text class="value" x="398" y="294">6 (1.3%)</text>
+  </g>
+
+  <text class="note" x="24" y="347">*Broad match: comments mentioning 988 or asking for more detail. Subtopics overlap with this and each other; bars should not be added together.</text>
+  <text class="note" x="24" y="366">Base: 457 suggestions after excluding blank answers and clear “no change” replies; 57 such replies excluded. Percentages use 457.</text>
+  <text class="note" x="24" y="383">There were 1,076 student surveys; not every student left a written suggestion. Keyword counts are approximate, not a representative poll.</text>
+</svg>

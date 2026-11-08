@@ -1,0 +1,55 @@
+date,county,students,adults,adult_roles,first,last,bursts,lang,type,pct_answering_at_same_time,median_days_after_training,likely_collection
+2025-10-21,Anne Arundel,0,18,School staff 18,2025-10-21 14:08,2025-10-21 14:12,1,English,Adults only,100.0,0.0,"Live, own devices"
+2025-10-29,Prince George's,0,10,School staff 10,2026-01-15 10:48,2026-01-15 11:12,1,English,Adults only,0.0,78.0,One at a time (likely typed in later)
+2025-11-18,Prince George's,0,1,Caregiver/parent 1,2025-11-18 17:52,2025-11-18 17:52,1,English,Adults only,,0.0,Too few to tell
+2025-11-20,Fairfax,0,6,"Other/community 3, School staff 2, Multiple 1",2025-11-20 10:23,2025-11-20 10:27,1,English,Adults only,80.0,0.0,"Live, own devices"
+2025-12-03,Montgomery,0,6,"Other/community 4, Caregiver/parent 2",2025-12-03 19:53,2025-12-03 21:09,1,English,Adults only,80.0,0.0,"Live, own devices"
+2025-12-03,Prince George's,0,1,Other/community 1,2025-12-03 19:53,2025-12-03 19:53,1,English,Adults only,,0.0,Too few to tell
+2025-12-10,Montgomery,0,3,"Other/community 2, Multiple 1",2025-12-10 18:59,2025-12-22 13:16,2,English,Adults only,,0.0,Too few to tell
+2025-12-10,Prince George's,0,2,Caregiver/parent 2,2025-12-10 08:44,2025-12-10 08:44,1,Spanish,Adults only,,0.0,Too few to tell
+2025-12-11,Harris,0,1,Other/community 1,2025-12-22 10:00,2025-12-22 10:00,1,English,Adults only,,11.0,Too few to tell
+2025-12-11,Montgomery,0,3,"Other/community 2, Multiple 1",2025-12-11 13:00,2025-12-11 13:00,1,English,Adults only,,0.0,Too few to tell
+2025-12-15,Anne Arundel,0,3,"Other/community 2, School staff 1",2025-12-15 18:04,2025-12-15 18:05,1,English,Adults only,,0.0,Too few to tell
+2025-12-15,Prince George's,0,3,Other/community 3,2025-12-15 18:04,2025-12-15 18:05,1,English/Spanish,Adults only,,0.0,Too few to tell
+2025-12-19,Anne Arundel,0,2,Other/community 2,2025-12-19 11:52,2025-12-19 11:52,1,English,Adults only,,0.0,Too few to tell
+2026-01-13,Anne Arundel,0,10,"School staff 9, Multiple 1",2026-01-13 19:24,2026-01-14 08:21,2,English,Adults only,89.0,0.0,"Live, own devices"
+2026-01-14,Anne Arundel,0,1,Caregiver/parent 1,2026-01-14 08:52,2026-01-14 08:52,1,English,Adults only,,0.0,Too few to tell
+2026-01-22,Prince George's,0,31,"Caregiver/parent 25, Multiple 3, Other/community 2, School staff 1",2026-02-06 14:15,2026-03-05 17:23,4,English/Spanish,Adults only,0.0,20.0,One at a time (likely typed in later)
+2026-02-24,Anne Arundel,0,9,"School staff 7, Multiple 2",2026-02-24 07:57,2026-02-24 07:59,1,English,Adults only,100.0,0.0,"Live, own devices"
+2026-03-03,Anne Arundel,0,2,School staff 2,2026-03-03 19:22,2026-03-03 19:22,1,English,Adults only,,0.0,Too few to tell
+2026-03-27,Prince George's,0,12,"School staff 11, Other/community 1",2026-04-10 00:10,2026-04-10 00:21,1,English,Adults only,0.0,14.0,One at a time (likely typed in later)
+2026-04-08,Prince George's,0,1,Caregiver/parent 1,2026-04-08 19:07,2026-04-08 19:07,1,English,Adults only,,0.0,Too few to tell
+2026-04-09,Montgomery,0,4,Other/community 4,2026-04-09 19:23,2026-04-09 20:52,1,English,Adults only,,0.0,Too few to tell
+2026-04-10,Montgomery,0,1,Other/community 1,2026-04-10 12:56,2026-04-10 12:56,1,English,Adults only,,0.0,Too few to tell
+2026-05-06,Prince George's,0,1,Caregiver/parent 1,2026-05-06 12:53,2026-05-06 12:53,1,English,Adults only,,0.0,Too few to tell
+2026-05-09,Anne Arundel,0,4,"Caregiver/parent 1, School staff 1, Other/community 1, Multiple 1",2026-05-09 14:40,2026-05-09 14:40,1,English,Adults only,,0.0,Too few to tell
+2026-05-12,Prince George's,0,8,Other/community 8,2026-05-15 09:43,2026-05-15 09:53,1,English,Adults only,0.0,3.0,One at a time (likely typed in later)
+2026-06-05,Montgomery,0,1,Caregiver/parent 1,2026-06-05 09:55,2026-06-05 09:55,1,English,Adults only,,0.0,Too few to tell
+2026-07-08,Prince George's,0,1,Other/community 1,2026-07-08 19:01,2026-07-08 19:01,1,English,Adults only,,0.0,Too few to tell
+2026-07-26,Montgomery,0,5,"Caregiver/parent 3, Multiple 1, Other/community 1",2026-07-26 17:26,2026-07-26 23:22,2,English,Adults only,0.0,0.0,One at a time (likely typed in later)
+2026-07-27,Montgomery,0,1,Other/community 1,2026-07-26 17:53,2026-07-26 17:53,1,English,Adults only,,-1.0,Too few to tell
+2026-08-18,Anne Arundel,0,1,School staff 1,2026-08-21 10:07,2026-08-21 10:07,1,English,Adults only,,3.0,Too few to tell
+2026-08-27,Montgomery,0,7,Other/community 7,2026-08-27 14:34,2026-08-30 14:34,5,English,Adults only,17.0,1.0,Too few to tell
+2025-12-11,Prince George's,1,11,"Other/community 8, Multiple 2, Caregiver/parent 1",2025-12-11 13:00,2025-12-27 08:32,3,English,Both,82.0,0.0,"Live, own devices"
+2026-04-15,Prince George's,30,30,Other/community 30,2026-04-16 14:19,2026-05-08 13:00,4,English,Both,0.0,2.0,One at a time (likely typed in later)
+2026-04-23,Prince George's,2,15,"Caregiver/parent 11, Other/community 3, Multiple 1",2026-04-30 12:51,2026-04-30 13:30,1,English,Both,0.0,7.0,One at a time (likely typed in later)
+2026-04-23,Queen Anne's,6,6,Caregiver/parent 6,2026-04-24 13:14,2026-04-24 13:26,1,Spanish,Both,0.0,1.0,One at a time (likely typed in later)
+2026-03-26,Prince George's,16,0,,2026-04-09 23:47,2026-04-10 00:07,1,English,Students only,0.0,14.0,One at a time (likely typed in later)
+2026-04-14,Anne Arundel,31,0,,2026-05-04 08:41,2026-05-04 09:10,1,English,Students only,0.0,20.0,One at a time (likely typed in later)
+2026-04-15,Anne Arundel,30,0,,2026-05-04 09:11,2026-05-04 09:39,1,English,Students only,0.0,19.0,One at a time (likely typed in later)
+2026-04-27,Anne Arundel,39,0,,2026-05-04 13:55,2026-05-04 15:41,1,English,Students only,0.0,7.0,One at a time (likely typed in later)
+2026-04-28,Anne Arundel,38,0,,2026-05-04 14:54,2026-05-04 21:22,2,English,Students only,0.0,6.0,One at a time (likely typed in later)
+2026-04-30,Anne Arundel,60,0,,2026-05-06 09:00,2026-05-06 10:39,1,English,Students only,0.0,6.0,One at a time (likely typed in later)
+2026-05-01,Anne Arundel,52,0,,2026-05-06 12:08,2026-05-06 12:58,1,English,Students only,0.0,5.0,One at a time (likely typed in later)
+2026-05-09,Montgomery,3,0,,2026-05-09 12:55,2026-05-10 10:55,2,English,Students only,,0.0,Too few to tell
+2026-05-13,Prince George's,104,0,,2026-05-18 10:14,2026-05-20 16:21,2,English,Students only,0.0,7.0,One at a time (likely typed in later)
+2026-06-01,Prince George's,26,0,,2026-06-02 12:06,2026-06-02 14:36,1,English,Students only,0.0,1.0,One at a time (likely typed in later)
+2026-09-01,Anne Arundel,54,0,,2026-09-08 12:53,2026-09-08 15:09,1,English,Students only,0.0,7.0,One at a time (likely typed in later)
+2026-09-02,Anne Arundel,51,0,,2026-09-08 13:05,2026-09-08 17:08,1,English,Students only,0.0,6.0,One at a time (likely typed in later)
+2026-09-28,Anne Arundel,143,0,,2026-10-02 17:13,2026-10-06 17:11,3,English,Students only,0.0,8.0,One at a time (likely typed in later)
+2026-09-29,Anne Arundel,115,0,,2026-10-06 15:28,2026-10-06 21:42,2,English,Students only,0.0,7.0,One at a time (likely typed in later)
+2026-10-05,Anne Arundel,33,0,,2026-10-24 23:39,2026-10-25 00:09,1,English,Students only,0.0,19.0,One at a time (likely typed in later)
+2026-10-08,Anne Arundel,74,0,,2026-10-24 22:21,2026-10-24 23:39,1,English,Students only,0.0,16.0,One at a time (likely typed in later)
+2026-10-09,Anne Arundel,48,0,,2026-10-25 00:10,2026-10-25 00:42,1,English,Students only,0.0,16.0,One at a time (likely typed in later)
+2026-10-20,Anne Arundel,62,0,,2026-10-22 13:18,2026-10-23 08:03,2,English,Students only,0.0,3.0,One at a time (likely typed in later)
+2026-10-21,Anne Arundel,57,0,,2026-10-21 14:06,2026-10-22 13:17,3,English,Students only,0.0,0.0,One at a time (likely typed in later)
